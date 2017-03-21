@@ -1,8 +1,0 @@
-{
-    "name": "bilginnet/yii2-cropper",
-    "description": "Yii2 Bootstrap Cropper Input Widget",  
-    "require": {
-      "yiisoft/yii2": "*",
-      "yiisoft/yii2-bootstrap": "*"
-    },
-}
