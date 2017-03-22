@@ -1,5 +1,6 @@
 # yii2-cropper
 
+[![Minimum PHP Version](http://img.shields.io/badge/php-%3E%3D%205.3-8892BF.svg)](https://php.net/)
 [![Latest Stable Version](https://poser.pugx.org/bilginnet/yii2-cropper/v/stable)](https://packagist.org/packages/bilginnet/yii2-cropper)
 [![Total Downloads](https://poser.pugx.org/bilginnet/yii2-cropper/downloads)](https://packagist.org/packages/bilginnet/yii2-cropper)
 [![Latest Unstable Version](https://poser.pugx.org/bilginnet/yii2-cropper/v/unstable)](https://packagist.org/packages/bilginnet/yii2-cropper)
