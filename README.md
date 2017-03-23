@@ -114,8 +114,8 @@ Advanced Usage in _form File
         // you can customize 
         'icons' => [
             'browse' => '<i class="fa fa-image"></i>',
-            'crop' => '<i class="fa fa-image"></i>',
-            'close' => '<i class="fa fa-image"></i>',
+            'crop' => '<i class="fa fa-crop"></i>',
+            'close' => '<i class="fa fa-crop"></i>',
         ]
     ],
 
