@@ -88,7 +88,7 @@ class Cropper extends InputWidget
         $aspectRatio = $options['width'] / $options['height'];
         if (!isset($options['preview']['url'])) $options['preview']['url'] = null;
         if (!isset($options['preview']['width'])) $options['preview']['width'] = 100;
-        if (!isset($options['preview']['height'])) $options['preview']['height'] = 100 / $aspectRatio;
+        if (!isset($options['preview']['height'])) $options['preview']['height'] = $options['preview']['width'] / $aspectRatio;
 
 
         if (!isset($options['icons']['browse'])) $options['icons']['browse'] = '<i class="fa fa-image"></i>';
