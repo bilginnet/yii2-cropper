@@ -6,7 +6,7 @@
 [![Latest Unstable Version](https://poser.pugx.org/bilginnet/yii2-cropper/v/unstable)](https://packagist.org/packages/bilginnet/yii2-cropper)
 [![License](https://poser.pugx.org/bilginnet/yii2-cropper/license)](https://packagist.org/packages/bilginnet/yii2-cropper)
 
-<a href="https://fengyuanchen.github.io/cropper/" target="_blank">Cropper.js</a> - Bootstrap Cropper (recommended) (included already).
+<a href="https://fengyuanchen.github.io/cropper/" target="_blank">Cropper.js</a> - Bootstrap Cropper (recommended) (already included).
 
 Features
 ------------
@@ -41,21 +41,21 @@ to the require section of your `composer.json` file.
 Usage
 -----
 
-Let 's add into config in your main-local config file before return[]
+Let's add into config in your main-local config file before return[]
 ````php
        $baseUrl = str_replace('/backend/web', '', (new Request)->getBaseUrl());
        $baseUrl = str_replace('/frontend/web', '', $baseUrl);
 
        Yii::setAlias('@uploadUrl', $baseUrl.'/uploads/');
        Yii::setAlias('@uploadPath', realpath(dirname(__FILE__).'/../../uploads/'));
-       // image file will upload in //root/uploads   folder
+       // image file will upload in //root/uploads folder
        
        return [
            ....
        ]
 ````
 
-Let 's add  in your model file
+Let's add in your model file
 ````php
     public $_image
 
@@ -94,7 +94,7 @@ Let 's add  in your model file
 
 
 
-Advanced Usage in _form File
+Advanced usage in _form file
 -----
 ````php
  echo $form->field($model, '_image')->widget(\bilginnet\cropper\Cropper::className(), [
@@ -105,9 +105,9 @@ Advanced Usage in _form File
         // optional
         // url must be set in update action
         'preview' => [
-            'url' => '', // set in update action // (!$model->isNewRevord) ? Yii::getPAlias('@uploadUrl/$model->image') : ''
+            'url' => '', // set in update action // (!$model->isNewRecord) ? Yii::getPAlias('@uploadUrl/$model->image') : ''
             'width => 100, // default 100 // default is cropperWidth if cropperWidth < 100
-            'height' => 100, // Will calculate automatically by aspect Ratio if not set
+            'height' => 100, // Will calculate automatically by aspect ratio if not set
         ],
 
         // optional // defaults following code
@@ -127,7 +127,7 @@ Advanced Usage in _form File
 ````
 
 
-Simple Usage in _form File
+Simple usage in _form File
 -----
 ````php
  echo $form->field($model, '_image')->widget(\bilginnet\cropper\Cropper::className(), [
