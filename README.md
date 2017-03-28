@@ -121,7 +121,7 @@ Advanced usage in _form File
 
     // optional // defaults following code
     // you can customize 
-    'label' => 'Model Attribute Label', 
+    'label' => '$model->attribute->label', 
 
  ]);
 ````
