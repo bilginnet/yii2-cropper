@@ -15,7 +15,7 @@ Features
 + Image Flip
 + Image Zoom
 + Coordinates
-+ Sizes
++ Image Sizes Info
 + Base64 Data
 
 Installation
