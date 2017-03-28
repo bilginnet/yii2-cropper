@@ -94,7 +94,7 @@ Let's add  in your model file
 
 
 
-Advanced usage in _form File
+Advanced usage in _form file
 -----
 ````php
  echo $form->field($model, '_image')->widget(\bilginnet\cropper\Cropper::className(), [
@@ -127,7 +127,7 @@ Advanced usage in _form File
 ````
 
 
-Simple usage in _form File
+Simple usage in _form file
 -----
 ````php
  echo $form->field($model, '_image')->widget(\bilginnet\cropper\Cropper::className(), [
