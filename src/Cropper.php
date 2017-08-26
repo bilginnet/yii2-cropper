@@ -86,7 +86,7 @@ class Cropper extends InputWidget
         }
 
         $aspectRatio = $options['width'] / $options['height'];
-        if (!isset($options['preview']['url'])) $options['preview']['url'] = null;
+        if (!isset($options['preview']['url']) || empty($options['preview']['url'])) $options['preview']['url'] = null;
         if (!isset($options['preview']['width'])) {
 			$defaultPreviewWidth = 100;
 			if ($options['width'] < $defaultPreviewWidth)
