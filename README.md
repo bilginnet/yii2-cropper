@@ -115,7 +115,17 @@ Advanced usage in _form file
         'icons' => [
             'browse' => '<i class="fa fa-image"></i>',
             'crop' => '<i class="fa fa-crop"></i>',
-            'close' => '<i class="fa fa-crop"></i>',
+            'close' => '<i class="fa fa-crop"></i>',       
+            'zoom-in' => '<i class="fa fa-search-plus"></i>',
+            'zoom-out' => '<i class="fa fa-search-minus"></i>',
+            'rotate-left' => '<i class="fa fa-rotate-left"></i>',
+            'rotate-right' => '<i class="fa fa-rotate-right"></i>',
+            'flip-horizontal' => '<i class="fa fa-arrows-h"></i>',
+            'flip-vertical' => '<i class="fa fa-arrows-v"></i>',
+            'move-left' => '<i class="fa fa-arrow-left"></i>',
+            'move-right' => '<i class="fa fa-arrow-right"></i>',
+            'move-up' => '<i class="fa fa-arrow-up"></i>',
+            'move-down' => '<i class="fa fa-arrow-down"></i>',
         ]
     ],
 
