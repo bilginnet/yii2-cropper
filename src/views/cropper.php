@@ -39,7 +39,7 @@ if ($label !== false) {
 
 <div class="cropper-container clearfix">
 
-    <input type="text" id="<?= $inputOptions['id'] ?>" name="<?=  $inputOptions['name'] ?>" title="" style="width: 0; height: 0; border: none;">
+    <input type="text" id="<?= $inputOptions['id'] ?>" name="<?=  $inputOptions['name'] ?>" title="" style="width: 1px; height: 1px; border: none;">
 
     <?= Html::button($browseLabel, [
         'class' => 'btn btn-primary',
