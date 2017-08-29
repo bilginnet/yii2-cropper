@@ -30,7 +30,6 @@ $closeLabel = $cropperOptions['icons']['close'] . ' ' . Yii::t('cropper', 'Crop'
 $label = $inputOptions['label'];
 if ($label !== false) {
     $browseLabel = $cropperOptions['icons']['browse'] . ' ' . $label;
-
 }
 
 ?>
