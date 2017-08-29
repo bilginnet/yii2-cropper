@@ -59,6 +59,8 @@ class Cropper extends InputWidget
         parent::run();
 
         return $this->render('cropper', [
+            'model' => $this->model,
+            'attribute' => $this->attribute,
             'cropperOptions' => $this->cropperOptions,
             'inputOptions' => $this->inputOptions,
         ]);
