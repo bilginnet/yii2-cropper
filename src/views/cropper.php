@@ -7,7 +7,8 @@ use yii\web\View;
 /** @var $this View */
 /** @var $cropperOptions mixed */
 /** @var $inputOptions  mixed */
-
+/** @var $model \yii\base\Model */
+/** @var $attribute string */
 
 \bilginnet\cropper\CropperAsset::register($this);
 
@@ -39,7 +40,7 @@ if ($label !== false) {
 
 <div class="cropper-container clearfix">
 
-    <input type="text" id="<?= $inputOptions['id'] ?>" name="<?=  $inputOptions['name'] ?>" title="" style="width: 1px; height: 1px; border: none;">
+    <input type="text" id="<?= $inputOptions['id'] ?>" name="<?=  $inputOptions['name'] ?>" title="" style="width: 1px; height: 1px; border: none;" value="<?= $model->{$attribute} ?>">
 
     <?= Html::button($browseLabel, [
         'class' => 'btn btn-primary',
