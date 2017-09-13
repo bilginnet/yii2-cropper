@@ -7,6 +7,8 @@ use yii\web\View;
 /** @var $this View */
 /** @var $cropperOptions mixed */
 /** @var $inputOptions  mixed */
+/** @var $template string */
+
 
 \bilginnet\cropper\CropperAsset::register($this);
 
@@ -30,31 +32,34 @@ $closeLabel = $cropperOptions['icons']['close'] . ' ' . Yii::t('cropper', 'Crop'
 $label = $inputOptions['label'];
 if ($label !== false) {
     $browseLabel = $cropperOptions['icons']['browse'] . ' ' . $label;
+
 }
 
+
+$buttonContent = Html::button($browseLabel, [
+    'class' => $cropperOptions['buttonCssClass'],
+    'data-toggle' => 'modal',
+    'data-target' => '#cropper-modal-' . $unique,
+    //'data-keyboard' => 'false',
+    'data-backdrop' => 'static',
+]);
+$previewContent = null;
+if ($cropperOptions['preview'] !== false) {
+    $previewOptions = $cropperOptions['preview'];
+    $previewImage = isset($previewOptions['url']) ? Html::img($previewOptions['url'], ['width' => $previewOptions['width'], 'height' => $previewOptions['height']]) : null;
+    $previewContent = '<div class="cropper-container clearfix">' . Html::tag('div', $previewImage, [
+        'id' => 'cropper-result-'.$unique,
+        'class' => 'cropper-result',
+        'style' => 'clear: both; margin-top: 10px; margin-bottom: 10px; width: '.$previewOptions['width'].'px; height: '.$previewOptions['height'].'px; border: 1px dotted #bfbfbf',
+    ]) . '</div>';
+}
+$template = str_replace('{button}', $buttonContent, $template);
+$template = str_replace('{preview}', $previewContent, $template);
 ?>
 
 
-<div class="cropper-container clearfix">
-
-    <input type="text" id="<?= $inputOptions['id'] ?>" name="<?=  $inputOptions['name'] ?>" title="" style="width: 1px; height: 1px; border: none;" value="<?= $inputOptions['value'] ?>">
-
-    <?= Html::button($browseLabel, [
-        'class' => 'btn btn-primary',
-        'data-toggle' => 'modal',
-        'data-target' => '#cropper-modal-' . $unique,
-        //'data-keyboard' => 'false',
-        'data-backdrop' => 'static',
-    ]) ?>
-
-    <?php if ($cropperOptions['preview'] !== false) : ?>
-        <?php $preview = $cropperOptions['preview']; ?>
-        <div class="cropper-result" id="cropper-result-<?= $unique ?>" style="margin-top: 10px; width: <?= $preview['width'] ?>px; height: <?= $preview['height'] ?>px; border: 1px dotted #bfbfbf">
-            <?php if (isset($preview['url'])) {
-                echo Html::img($preview['url'], ['width' => $preview['width'], 'height' => $preview['height']]);
-            } ?>
-        </div>
-    <?php endif; ?>
+<div class="cropper-wrapper clearfix">
+    <?php echo $template ?>
 </div>
 
 <?php $this->registerCss('
