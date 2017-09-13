@@ -144,7 +144,7 @@ $this->registerJs(<<<JS
     $('#cropper-result-$unique').click(function(){
         var buttonId = $(this).data('buttonid');        
         $('#' + buttonId).click();
-    })
+    });
 
     var options_$unique = {
         croppable: false,
