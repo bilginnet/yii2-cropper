@@ -42,6 +42,7 @@ $buttonContent = Html::button($browseLabel, [
     'data-target' => '#cropper-modal-' . $unique,
     //'data-keyboard' => 'false',
     'data-backdrop' => 'static',
+    'id' => 'cropper-select-button-' . $unique,
 ]);
 $previewContent = null;
 $previewOptions = $cropperOptions['preview'];
@@ -51,6 +52,7 @@ if ($cropperOptions['preview'] !== false) {
         'id' => 'cropper-result-'.$unique,
         'class' => 'cropper-result',
         'style' => 'width: '.$previewOptions['width'].'px; height: '.$previewOptions['height'].'px;',
+        'data-buttonid' => 'cropper-select-button-' . $unique
     ]) . '</div>';
 }
 $template = str_replace('{button}', $buttonContent, $template);
@@ -67,7 +69,8 @@ $template = str_replace('{preview}', $previewContent, $template);
         margin-top: 10px; 
         border: 1px dotted #bfbfbf; 
         background-color: #f1f1f1;
-        position: relative;        
+        position: relative;   
+        cursor: pointer;     
     }
     .cropper-result:after {
         content: "+";
@@ -137,6 +140,11 @@ $modal = $this->render('modal', [
 $this->registerJs(<<<JS
 
     $('body').prepend('$modal');
+
+    $('#cropper-result-$unique').click(function(){
+        var buttonId = $(this).data('buttonid');        
+        $('#' + buttonId).click();
+    })
 
     var options_$unique = {
         croppable: false,
