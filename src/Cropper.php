@@ -25,6 +25,8 @@ class Cropper extends InputWidget
      *          height int    // default height by aspectRatio
      *     ]
      *
+     * buttonCssClass string // default 'btn btn-primary'
+     *
      * icons array
      *     [
      *          browse
@@ -38,10 +40,18 @@ class Cropper extends InputWidget
     public $cropperOptions;
     private $inputOptions;
 
+
     /**
      * @var  bool | string
      */
     public $label;
+
+    /**
+     * default '{button} {preview}'
+     *
+     * @var string
+     */
+    public $template = '{button} {preview}';
 
 
 
@@ -59,8 +69,9 @@ class Cropper extends InputWidget
         parent::run();
 
         return $this->render('cropper', [
-            'cropperOptions' => $this->cropperOptions, 
+            'cropperOptions' => $this->cropperOptions,
             'inputOptions' => $this->inputOptions,
+            'template' => $this->template,
         ]);
     }
 
@@ -97,19 +108,22 @@ class Cropper extends InputWidget
         if (!isset($options['preview']['height'])) $options['preview']['height'] = $options['preview']['width'] / $aspectRatio;
 
 
+        if (!isset($options['buttonCssClass'])) $options['buttonCssClass'] = 'btn btn-primary';
+
+
         if (!isset($options['icons']['browse'])) $options['icons']['browse'] = '<i class="fa fa-image"></i>';
         if (!isset($options['icons']['crop'])) $options['icons']['crop'] = '<i class="fa fa-crop"></i>';
         if (!isset($options['icons']['close'])) $options['icons']['close'] = '<i class="fa fa-crop"></i>';
-	if (!isset($options['icons']['zoom-in'])) $options['icons']['zoom-in'] = '<i class="fa fa-search-plus"></i>';
-	if (!isset($options['icons']['zoom-out'])) $options['icons']['zoom-out'] = '<i class="fa fa-search-minus"></i>';
-	if (!isset($options['icons']['rotate-left'])) $options['icons']['rotate-left'] = '<i class="fa fa-rotate-left"></i>';
-	if (!isset($options['icons']['rotate-right'])) $options['icons']['rotate-right'] = '<i class="fa fa-rotate-right"></i>';
-	if (!isset($options['icons']['flip-horizontal'])) $options['icons']['flip-horizontal'] = '<i class="fa fa-arrows-h"></i>';
-	if (!isset($options['icons']['flip-vertical'])) $options['icons']['flip-vertical'] = '<i class="fa fa-arrows-v"></i>';
-	if (!isset($options['icons']['move-left'])) $options['icons']['move-left'] = '<i class="fa fa-arrow-left"></i>';
-	if (!isset($options['icons']['move-right'])) $options['icons']['move-right'] = '<i class="fa fa-arrow-right"></i>';
-	if (!isset($options['icons']['move-up'])) $options['icons']['move-up'] = '<i class="fa fa-arrow-up"></i>';
-	if (!isset($options['icons']['move-down'])) $options['icons']['move-down'] = '<i class="fa fa-arrow-down"></i>';
+        if (!isset($options['icons']['zoom-in'])) $options['icons']['zoom-in'] = '<i class="fa fa-search-plus"></i>';
+        if (!isset($options['icons']['zoom-out'])) $options['icons']['zoom-out'] = '<i class="fa fa-search-minus"></i>';
+        if (!isset($options['icons']['rotate-left'])) $options['icons']['rotate-left'] = '<i class="fa fa-rotate-left"></i>';
+        if (!isset($options['icons']['rotate-right'])) $options['icons']['rotate-right'] = '<i class="fa fa-rotate-right"></i>';
+        if (!isset($options['icons']['flip-horizontal'])) $options['icons']['flip-horizontal'] = '<i class="fa fa-arrows-h"></i>';
+        if (!isset($options['icons']['flip-vertical'])) $options['icons']['flip-vertical'] = '<i class="fa fa-arrows-v"></i>';
+        if (!isset($options['icons']['move-left'])) $options['icons']['move-left'] = '<i class="fa fa-arrow-left"></i>';
+        if (!isset($options['icons']['move-right'])) $options['icons']['move-right'] = '<i class="fa fa-arrow-right"></i>';
+        if (!isset($options['icons']['move-up'])) $options['icons']['move-up'] = '<i class="fa fa-arrow-up"></i>';
+        if (!isset($options['icons']['move-down'])) $options['icons']['move-down'] = '<i class="fa fa-arrow-down"></i>';
 
         $this->cropperOptions = $options;
     }
@@ -119,7 +133,7 @@ class Cropper extends InputWidget
     private function setInputOptions()
     {
         $label = $this->label;
-        if ($label === null || (is_bool($label) && $label)) {
+        if (empty($label) || (is_bool($label) && $label)) {
             $label = $this->model->getAttributeLabel($this->attribute);
         }
         $className = StringHelper::basename(get_class($this->model));
@@ -128,7 +142,7 @@ class Cropper extends InputWidget
             'id' => $this->options['id'],
             'name' => $className . "[$attribute]",
             'label' => $label, //$this->model->getAttributeLabel($this->attribute)
-	    'value' => $this->value,
+            'value' => $this->value,
         ];
         $this->inputOptions = $inputOptions;
     }
