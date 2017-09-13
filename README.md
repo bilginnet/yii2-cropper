@@ -110,6 +110,10 @@ Advanced usage in _form file
             'height' => 100, // Will calculate automatically by aspect ratio if not set
         ],
 
+        // optional //default following code
+        // you can customize 
+        'buttonCssClass' => 'btn btn-primary',
+
         // optional // defaults following code
         // you can customize 
         'icons' => [
@@ -132,6 +136,10 @@ Advanced usage in _form file
     // optional // defaults following code
     // you can customize 
     'label' => '$model->attribute->label', 
+    
+    // optional // defaults following code
+    // you can customize 
+    'template' => '{button}{preview}',
 
  ]);
 ````
