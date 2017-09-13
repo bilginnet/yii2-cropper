@@ -55,7 +55,8 @@ if ($cropperOptions['preview'] !== false) {
         'data-buttonid' => 'cropper-select-button-' . $unique
     ]) . '</div>';
 }
-$template = str_replace('{button}', $buttonContent, $template);
+$input = '<input type="text" id="'.$inputOptions['id'].'" name="'.$inputOptions['name'].'" title="" style="float:left; width: 1px; height: 1px; border: none;" value="'.$inputOptions['value'].'">';
+$template = str_replace('{button}',  $input . $buttonContent, $template);
 $template = str_replace('{preview}', $previewContent, $template);
 ?>
 
