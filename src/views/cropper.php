@@ -44,13 +44,13 @@ $buttonContent = Html::button($browseLabel, [
     'data-backdrop' => 'static',
 ]);
 $previewContent = null;
+$previewOptions = $cropperOptions['preview'];
 if ($cropperOptions['preview'] !== false) {
-    $previewOptions = $cropperOptions['preview'];
     $previewImage = isset($previewOptions['url']) ? Html::img($previewOptions['url'], ['width' => $previewOptions['width'], 'height' => $previewOptions['height']]) : null;
     $previewContent = '<div class="cropper-container clearfix">' . Html::tag('div', $previewImage, [
         'id' => 'cropper-result-'.$unique,
         'class' => 'cropper-result',
-        'style' => 'clear: both; margin-top: 10px; margin-bottom: 10px; width: '.$previewOptions['width'].'px; height: '.$previewOptions['height'].'px; border: 1px dotted #bfbfbf',
+        'style' => 'width: '.$previewOptions['width'].'px; height: '.$previewOptions['height'].'px;',
     ]) . '</div>';
 }
 $template = str_replace('{button}', $buttonContent, $template);
@@ -63,6 +63,22 @@ $template = str_replace('{preview}', $previewContent, $template);
 </div>
 
 <?php $this->registerCss('
+    .cropper-result {
+        margin-top: 10px; 
+        border: 1px dotted #bfbfbf; 
+        background-color: #f1f1f1;
+        position: relative;        
+    }
+    .cropper-result:after {
+        content: "+";
+        font-size: 56px;
+        color: #bdbdbd;
+        font-weight: 700;
+        position: absolute;
+        top: 40px;
+        left: 50%;        
+        transform: translate(-50%, 0);        
+    }
     label[for='.$inputOptions['id'].'] {
         display: none;
     }
