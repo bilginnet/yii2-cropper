@@ -108,6 +108,11 @@ Advanced usage in _form file
      * browseInputId  = #cropper-input-$uniqueId // fileinput in modal
     */
     'uniqueId' => 'image-cropper' // will create automaticaly if not set
+       
+    // you will see this image in the crop area if is set   
+    // default null
+    'imageUrl' => Yii::getAlias('@web/image.jpg'),
+    
     'cropperOptions' => [
         'width' => 100, // must be specified
         'height' => 100, // must be specified
