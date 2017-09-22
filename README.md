@@ -199,7 +199,7 @@ Don't forget to add this line into root in .htaccess file
 RewriteRule ^uploads/(.*)$ uploads/$1 [L]
 ````
 
-You can set image src with javascript directly
+You can set image.src directly with javascript 
 Sample:
 ````
 $(button).click(function() {
