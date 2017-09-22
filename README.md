@@ -174,5 +174,19 @@ Don't forget to add this line into root in .htaccess file
 RewriteRule ^uploads/(.*)$ uploads/$1 [L]
 ````
 
-I will add jsOptions[] soon
+jsOptions[]
 -----
+````php
+ echo $form->field($model, '_image')->widget(\bilginnet\cropper\Cropper::className(), [
+    'cropperOptions' => [
+        'width' => 100, // must be specified
+        'height' => 100, // must be specified
+     ],
+     'jsOptions' => [
+        'onClick' => 'function(event){
+              // when click crop or close button 
+              // do something 
+        }'
+     ],
+]);
+````
