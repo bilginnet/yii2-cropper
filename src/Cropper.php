@@ -13,6 +13,27 @@ use yii\helpers\StringHelper;
  */
 class Cropper extends InputWidget
 {
+    /**
+     * if it is empty will be create automatically
+     *
+     * buttonId      = #cropper-select-button-$uniqueId
+     * previewId     = #cropper-result-$uniqueId
+     * modalId       = #cropper-modal-$uniqueId
+     * imageId       = #cropper-image-$uniqueId
+     * closeButtonId = #close-button-$uniqueId
+     * cropButtonId  = #close-button-$uniqueId
+     * inputId       = #cropper-input-$uniqueId
+     *
+     * @var string
+     */
+    public $uniqueId;
+
+    /**
+     * crop this image if its not empty
+     *
+     * @var string
+     */
+    public $imageUrl = null;
 
     /**
      * width int must be specified
@@ -37,7 +58,10 @@ class Cropper extends InputWidget
      * @var $cropperOptions []
      *
      */
+
     public $cropperOptions;
+    public $jsOptions;
+
     private $inputOptions;
 
 
@@ -69,7 +93,10 @@ class Cropper extends InputWidget
         parent::run();
 
         return $this->render('cropper', [
+            'uniqueId' => $this->uniqueId,
+            'imageUrl' => $this->imageUrl,
             'cropperOptions' => $this->cropperOptions,
+            'jsOptions' => $this->jsOptions,
             'inputOptions' => $this->inputOptions,
             'template' => $this->template,
         ]);
