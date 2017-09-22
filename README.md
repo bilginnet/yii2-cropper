@@ -124,7 +124,7 @@ Advanced usage in _form file
         // url must be set in update action
         'preview' => [
             'url' => '', // set in update action // (!$model->isNewRecord && !empty($model->image)) ? Yii::getAlias('@uploadUrl/'.$model->image) : '' // or null 
-            // you can set as string '100%'
+            // you can set width as string '100%'
             // if width is string then you must set height to
             'width' => 100, // default 100 // default is cropperWidth if cropperWidth < 100
             'height' => 100, // Will calculate automatically by aspect ratio if not set
