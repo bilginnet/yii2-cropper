@@ -104,7 +104,7 @@ Advanced usage in _form file
      * modalId       = #cropper-modal-$uniqueId
      * imageId       = #cropper-image-$uniqueId
      * closeButtonId = #close-button-$uniqueId
-     * cropButtonId  = #close-button-$uniqueId
+     * cropButtonId  = #crop-button-$uniqueId
      * inputId       = #cropper-input-$uniqueId 
     */
     'uniqueId' => 'image-cropper' // will create automaticaly if not set
