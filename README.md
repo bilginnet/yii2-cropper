@@ -17,6 +17,7 @@ Features
 + Coordinates
 + Image Sizes Info
 + Base64 Data
++ Set Image.Src With Javascript
 
 Installation
 ------------
