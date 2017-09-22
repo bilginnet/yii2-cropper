@@ -198,3 +198,15 @@ Don't forget to add this line into root in .htaccess file
 ````
 RewriteRule ^uploads/(.*)$ uploads/$1 [L]
 ````
+
+You can set image src with javascript directly
+Sample:
+````
+$(button).click(function() {
+   // #cropper-modal-$unique will show automatically when click the button
+   
+   // you must set uniqueId on widget
+   $('#cropper-image-$uniqueId').attr('src', 'image.jpeg');
+});
+````
+
