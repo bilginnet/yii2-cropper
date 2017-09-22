@@ -203,7 +203,7 @@ You can set image.src directly with javascript
 
 Sample:
 ````
-$(button).click(function() {
+$('button').click(function() {
    // #cropper-modal-$unique will show automatically when click the button
    
    // you must set uniqueId on widget
