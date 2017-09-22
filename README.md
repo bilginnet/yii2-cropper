@@ -172,12 +172,6 @@ Simple usage in _form file
 ````
 
 
-Notes
------
-Don't forget to add this line into root in .htaccess file
-````
-RewriteRule ^uploads/(.*)$ uploads/$1 [L]
-````
 
 jsOptions[]
 -----
@@ -194,4 +188,13 @@ jsOptions[]
         }'
      ],
 ]);
+````
+
+
+
+Notes
+-----
+Don't forget to add this line into root in .htaccess file
+````
+RewriteRule ^uploads/(.*)$ uploads/$1 [L]
 ````
