@@ -200,6 +200,7 @@ RewriteRule ^uploads/(.*)$ uploads/$1 [L]
 ````
 
 You can set image.src directly with javascript 
+
 Sample:
 ````
 $(button).click(function() {
