@@ -5,7 +5,10 @@ use yii\web\View;
 
 
 /** @var $this View */
+/** @var $uniqueId string */
+/** @var $imageUrl string */
 /** @var $cropperOptions mixed */
+/** @var $jsOptions mixed */
 /** @var $inputOptions  mixed */
 /** @var $template string */
 
@@ -13,7 +16,9 @@ use yii\web\View;
 \bilginnet\cropper\CropperAsset::register($this);
 
 
-$unique = uniqid('cropper_');
+// set uniqueId if its empty
+if (empty($uniqueId)) $uniqueId = uniqid('cropper_');
+
 
 
 $cropWidth = $cropperOptions['width'];
@@ -39,23 +44,23 @@ if ($label !== false) {
 $buttonContent = Html::button($browseLabel, [
     'class' => $cropperOptions['buttonCssClass'],
     'data-toggle' => 'modal',
-    'data-target' => '#cropper-modal-' . $unique,
+    'data-target' => '#cropper-modal-' . $uniqueId,
     //'data-keyboard' => 'false',
     'data-backdrop' => 'static',
-    'id' => 'cropper-select-button-' . $unique,
+    'id' => 'cropper-select-button-' . $uniqueId,
 ]);
 $previewContent = null;
 $previewOptions = $cropperOptions['preview'];
 if ($cropperOptions['preview'] !== false) {
     $previewImage = isset($previewOptions['url']) ? Html::img($previewOptions['url'], ['width' => $previewOptions['width'], 'height' => $previewOptions['height']]) : null;
     $previewContent = '<div class="cropper-container clearfix">' . Html::tag('div', $previewImage, [
-        'id' => 'cropper-result-'.$unique,
+        'id' => 'cropper-result-'.$uniqueId,
         'class' => 'cropper-result',
         'style' => 'width: '.$previewOptions['width'].'px; height: '.$previewOptions['height'].'px;',
-        'data-buttonid' => 'cropper-select-button-' . $unique
+        'data-buttonid' => 'cropper-select-button-' . $uniqueId
     ]) . '</div>';
 }
-$input = '<input type="text" id="'.$inputOptions['id'].'" name="'.$inputOptions['name'].'" title="" style="float:left; width: 1px; height: 1px; border: none;" value="'.$inputOptions['value'].'">';
+$input = '<input type="text" id="'.$inputOptions['id'].'" name="'.$inputOptions['name'].'" title="" style="display: none;" value="'.$inputOptions['value'].'">';
 $template = str_replace('{button}',  $input . $buttonContent, $template);
 $template = str_replace('{preview}', $previewContent, $template);
 ?>
@@ -86,14 +91,14 @@ $template = str_replace('{preview}', $previewContent, $template);
     label[for='.$inputOptions['id'].'] {
         display: none;
     }
-    #cropper-modal-'.$unique.' img{
+    #cropper-modal-'.$uniqueId.' img{
         max-width: 100%;
     }
-    #cropper-modal-'.$unique.' .btn-file {
+    #cropper-modal-'.$uniqueId.' .btn-file {
         position: relative;
         overflow: hidden;
     }
-    #cropper-modal-'.$unique.' .btn-file input[type=file] {
+    #cropper-modal-'.$uniqueId.' .btn-file input[type=file] {
         position: absolute;
         top: 0;
         right: 0;
@@ -108,20 +113,20 @@ $template = str_replace('{preview}', $previewContent, $template);
         cursor: inherit;
         display: block;
     }
-    #cropper-modal-'.$unique.' .input-group .input-group-addon {
+    #cropper-modal-'.$uniqueId.' .input-group .input-group-addon {
         border-radius: 0;
         border-color: #d2d6de;
         background-color: #efefef;
         color: #555;
     }
-    #cropper-modal-'.$unique.' .height-warning.has-success .input-group-addon,
-    #cropper-modal-'.$unique.' .width-warning.has-success .input-group-addon{
+    #cropper-modal-'.$uniqueId.' .height-warning.has-success .input-group-addon,
+    #cropper-modal-'.$uniqueId.' .width-warning.has-success .input-group-addon{
         background-color: #00a65a;
         border-color: #00a65a;
         color: #fff;
     }
-    #cropper-modal-'.$unique.' .height-warning.has-error .input-group-addon,
-    #cropper-modal-'.$unique.' .width-warning.has-error .input-group-addon{
+    #cropper-modal-'.$uniqueId.' .height-warning.has-error .input-group-addon,
+    #cropper-modal-'.$uniqueId.' .width-warning.has-error .input-group-addon{
         background-color: #dd4b39;
         border-color: #dd4b39;
         color: #fff;
@@ -132,40 +137,38 @@ $template = str_replace('{preview}', $previewContent, $template);
 <?php
 $inputId = $inputOptions['id'];
 $modal = $this->render('modal', [
-    'unique' => $unique,
+    'uniqueId' => $uniqueId,
     'cropperOptions' => $cropperOptions,
 ]);
 
-
-
 $this->registerJs(<<<JS
-
+ 
     $('body').prepend('$modal');
 
-    $('#cropper-result-$unique').click(function(){
+    $('#cropper-result-$uniqueId').click(function(){
         var buttonId = $(this).data('buttonid');        
         $('#' + buttonId).click();
     });
 
-    var options_$unique = {
+    var options_$uniqueId = {
         croppable: false,
         croppedCanvas: '',
         
         element: {
-            modal: $('#cropper-modal-$unique'),
-            image: $('#cropper-image-$unique'),
-            _image: document.getElementById('cropper-image-$unique'),
-            result: $('#cropper-result-$unique')        
+            modal: $('#cropper-modal-$uniqueId'),
+            image: $('#cropper-image-$uniqueId'),
+            _image: document.getElementById('cropper-image-$uniqueId'),
+            result: $('#cropper-result-$uniqueId')        
         },
         
         input: {
             model: $('#$inputId'),
-            crop: $('#cropper-input-$unique')
+            crop: $('#cropper-input-$uniqueId')
         },
         
         button: {
-            crop: $('#crop-button-$unique'),
-            close: $('#close-button-$unique'),
+            crop: $('#crop-button-$uniqueId'),
+            close: $('#close-button-$uniqueId'),
         },
         
         data: {
@@ -180,138 +183,189 @@ $this->registerJs(<<<JS
         },
      
         inputData: {
-            width: $('#dataWidth-$unique'),
-            height: $('#dataHeight-$unique'),
-            X: $('#dataX-$unique'),
-            Y: $('#dataY-$unique')
+            width: $('#dataWidth-$uniqueId'),
+            height: $('#dataHeight-$uniqueId'),
+            X: $('#dataX-$uniqueId'),
+            Y: $('#dataY-$uniqueId')
         }
     };
     
+    var cropper_options_$uniqueId = {
+        aspectRatio: $aspectRatio,
+        viewMode: 2,            
+        autoCropArea: 0.98,
+        responsive: false,
+        crop: function (e) {
+
+            options_$uniqueId.data.width = Math.round(e.width);
+            options_$uniqueId.data.height = Math.round(e.height);
+            options_$uniqueId.data.X = e.scaleX;
+            options_$uniqueId.data.Y = e.scaleY;                                               
+            
+            options_$uniqueId.inputData.width.val(Math.round(e.width));
+            options_$uniqueId.inputData.height.val(Math.round(e.height));
+            options_$uniqueId.inputData.X.val(Math.round(e.x));
+            options_$uniqueId.inputData.Y.val(Math.round(e.y));                
+            
+            
+            if (options_$uniqueId.data.width < options_$uniqueId.data.cropWidth) {
+                options_$uniqueId.element.modal.find('.width-warning').removeClass('has-success').addClass('has-error');
+            } else {
+                options_$uniqueId.element.modal.find('.width-warning').removeClass('has-error').addClass('has-success');
+            }
+            
+            if (options_$uniqueId.data.height < options_$uniqueId.data.cropHeight) {
+                options_$uniqueId.element.modal.find('.height-warning').removeClass('has-success').addClass('has-error');                   
+            } else {
+                options_$uniqueId.element.modal.find('.height-warning').removeClass('has-error').addClass('has-success');                     
+            }
+        }, 
+        
+        built: function () {
+            options_$uniqueId.croppable = true;
+        }
+    }
     
-    options_$unique.input.crop.change(function(event) {
-        
-        
+    
+    // if imageUrl is set
+    var imageUrl_$uniqueId = '$imageUrl';
+    if (imageUrl_$uniqueId !== '') {               
+        options_$uniqueId.element._image.src = imageUrl_$uniqueId;
+        options_$uniqueId.element.image.css('display', 'none');
+    }    
+    
+    // when set imageSrc directly from out 
+    var imageSrc_$uniqueId = '';
+    options_$uniqueId.element.image.on('load', function () {
+        imageSrc_$uniqueId = options_$uniqueId.element.image.attr('src');
+        if (!options_$uniqueId.element.modal.hasClass('in')) {
+            options_$uniqueId.element.image.css('display', 'none');
+            options_$uniqueId.element.modal.modal('show'); 
+        }
+    });        
+    options_$uniqueId.element.modal.on('shown.bs.modal', function() {           
+        if (imageUrl_$uniqueId !== '') {
+            options_$uniqueId.element.image.css('display', 'block');           
+            // cropper start
+            options_$uniqueId.element.image.cropper(cropper_options_$uniqueId);    
+        }
+        if (imageSrc_$uniqueId !== '') {            
+            options_$uniqueId.element.image.css('display', 'block');
+            // cropper start
+            options_$uniqueId.element.image.cropper(cropper_options_$uniqueId);
+        }        
+    });
+            
+    
+    
+    
+    
+    options_$uniqueId.input.crop.change(function(event) {
+               
         // cropper reset
-        options_$unique.croppable = false;
-        options_$unique.element.image.cropper('destroy');        
-        options_$unique.element.modal.find('.width-warning, .height-warning').removeClass('has-success').removeClass('has-error');
+        options_$uniqueId.croppable = false;
+        options_$uniqueId.element.image.cropper('destroy');        
+        options_$uniqueId.element.modal.find('.width-warning, .height-warning').removeClass('has-success').removeClass('has-error');
         
         
         // image loading        
         if (typeof event.target.files[0] === 'undefined') {
-            options_$unique.element._image.src = "";
+            options_$uniqueId.element._image.src = "";
             return;
         }               
-        options_$unique.element._image.src = URL.createObjectURL(event.target.files[0]);
+        options_$uniqueId.element._image.src = URL.createObjectURL(event.target.files[0]);
         
-        
+                
         // cropper start
-        options_$unique.element.image.cropper({
-            aspectRatio: $aspectRatio,
-            viewMode: 2,
-            autoCropArea: 0.5,     
-            crop: function (e) {
-
-                options_$unique.data.width = Math.round(e.width);
-                options_$unique.data.height = Math.round(e.height);
-                options_$unique.data.X = e.scaleX;
-                options_$unique.data.Y = e.scaleY;                                               
-                
-                options_$unique.inputData.width.val(Math.round(e.width));
-                options_$unique.inputData.height.val(Math.round(e.height));
-                options_$unique.inputData.X.val(Math.round(e.x));
-                options_$unique.inputData.Y.val(Math.round(e.y));                
-                
-                
-                if (options_$unique.data.width < options_$unique.data.cropWidth) {
-                    options_$unique.element.modal.find('.width-warning').removeClass('has-success').addClass('has-error');
-                } else {
-                    options_$unique.element.modal.find('.width-warning').removeClass('has-error').addClass('has-success');
-                }
-                
-                if (options_$unique.data.height < options_$unique.data.cropHeight) {
-                    options_$unique.element.modal.find('.height-warning').removeClass('has-success').addClass('has-error');                   
-                } else {
-                    options_$unique.element.modal.find('.height-warning').removeClass('has-error').addClass('has-success');                     
-                }
-            }, 
-            
-            built: function () {
-                options_$unique.croppable = true;               
-            }
-        });        
+        options_$uniqueId.element.image.cropper(cropper_options_$uniqueId);                         
+        
     });
     
+
     
     
     
-    function setCrop$unique() {        
-        if (!options_$unique.croppable) {
+    function setCrop$uniqueId() {        
+        if (!options_$uniqueId.croppable) {
             return;
-        }        
-        options_$unique.croppedCanvas = options_$unique.element.image.cropper('getCroppedCanvas', {
-            width: options_$unique.data.cropWidth,
-            height: options_$unique.data.cropHeight
-        });
-        options_$unique.element.result.html('<img src="' + options_$unique.croppedCanvas.toDataURL() + '">');
+        }
         
-        options_$unique.input.model.attr('type', 'text');
-        options_$unique.input.model.val(options_$unique.croppedCanvas.toDataURL());
+        options_$uniqueId.croppedCanvas = options_$uniqueId.element.image.cropper('getCroppedCanvas', {
+            width: options_$uniqueId.data.cropWidth,
+            height: options_$uniqueId.data.cropHeight
+        });
+        options_$uniqueId.element.result.html('<img src="' + options_$uniqueId.croppedCanvas.toDataURL() + '">');
+        
+        options_$uniqueId.input.model.attr('type', 'text');
+        options_$uniqueId.input.model.val(options_$uniqueId.croppedCanvas.toDataURL());
     }
     
 
-    options_$unique.button.crop.click(function() { setCrop$unique(); });
-    options_$unique.button.close.click(function() { setCrop$unique(); });
-    $('[data-target="#cropper-modal-$unique"]').click(function() {
-        var src_$unique = $('#cropper-modal-$unique').find('.modal-body').find('img').attr('src');        
-        if (src_$unique === '') {
-            options_$unique.input.crop.click();
+    options_$uniqueId.button.crop.click(function() { setCrop$uniqueId(); });
+    options_$uniqueId.button.close.click(function() { setCrop$uniqueId(); });
+    $('[data-target="#cropper-modal-$uniqueId"]').click(function() {
+        var src_$uniqueId = $('#cropper-modal-$uniqueId').find('.modal-body').find('img').attr('src');        
+        if (src_$uniqueId === '') {
+            options_$uniqueId.input.crop.click();
         }
     });
     
   
-    options_$unique.element.modal.find('.move-left').click(function() { 
-        if (!options_$unique.croppable) return;
-        options_$unique.element.image.cropper('move', -10, 0);
+    options_$uniqueId.element.modal.find('.move-left').click(function() { 
+        if (!options_$uniqueId.croppable) return;
+        options_$uniqueId.element.image.cropper('move', -10, 0);
     });
-    options_$unique.element.modal.find('.move-right').click(function() {
-        if (!options_$unique.croppable) return;
-        options_$unique.element.image.cropper('move', 10, 0);     
+    options_$uniqueId.element.modal.find('.move-right').click(function() {
+        if (!options_$uniqueId.croppable) return;
+        options_$uniqueId.element.image.cropper('move', 10, 0);     
     });
-    options_$unique.element.modal.find('.move-up').click(function() { 
-        if (!options_$unique.croppable) return;
-        options_$unique.element.image.cropper('move', 0, -10);      
+    options_$uniqueId.element.modal.find('.move-up').click(function() { 
+        if (!options_$uniqueId.croppable) return;
+        options_$uniqueId.element.image.cropper('move', 0, -10);      
     });
-    options_$unique.element.modal.find('.move-down').click(function() { 
-        if (!options_$unique.croppable) return;
-        options_$unique.element.image.cropper('move', 0, 10);
+    options_$uniqueId.element.modal.find('.move-down').click(function() { 
+        if (!options_$uniqueId.croppable) return;
+        options_$uniqueId.element.image.cropper('move', 0, 10);
     });
-    options_$unique.element.modal.find('.zoom-in').click(function() {
-        if (!options_$unique.croppable) return;
-        options_$unique.element.image.cropper('zoom', 0.1); 
+    options_$uniqueId.element.modal.find('.zoom-in').click(function() {
+        if (!options_$uniqueId.croppable) return;
+        options_$uniqueId.element.image.cropper('zoom', 0.1); 
     });
-    options_$unique.element.modal.find('.zoom-out').click(function() {
-        if (!options_$unique.croppable) return;
-        options_$unique.element.image.cropper('zoom', -0.1);         
+    options_$uniqueId.element.modal.find('.zoom-out').click(function() {
+        if (!options_$uniqueId.croppable) return;
+        options_$uniqueId.element.image.cropper('zoom', -0.1);         
     });
-    options_$unique.element.modal.find('.rotate-left').click(function() { 
-        if (!options_$unique.croppable) return;
-        options_$unique.element.image.cropper('rotate', -15);
+    options_$uniqueId.element.modal.find('.rotate-left').click(function() { 
+        if (!options_$uniqueId.croppable) return;
+        options_$uniqueId.element.image.cropper('rotate', -15);
     });
-    options_$unique.element.modal.find('.rotate-right').click(function() { 
-        if (!options_$unique.croppable) return;
-        options_$unique.element.image.cropper('rotate', 15); 
+    options_$uniqueId.element.modal.find('.rotate-right').click(function() { 
+        if (!options_$uniqueId.croppable) return;
+        options_$uniqueId.element.image.cropper('rotate', 15); 
     });
-    options_$unique.element.modal.find('.flip-horizontal').click(function() { 
-        if (!options_$unique.croppable) return;
-        options_$unique.data.scaleX = -1 * options_$unique.data.scaleX;        
-        options_$unique.element.image.cropper('scaleX', options_$unique.data.scaleX);
+    options_$uniqueId.element.modal.find('.flip-horizontal').click(function() { 
+        if (!options_$uniqueId.croppable) return;
+        options_$uniqueId.data.scaleX = -1 * options_$uniqueId.data.scaleX;        
+        options_$uniqueId.element.image.cropper('scaleX', options_$uniqueId.data.scaleX);
     });
-    options_$unique.element.modal.find('.flip-vertical').click(function() { 
-        if (!options_$unique.croppable) return;
-        options_$unique.data.scaleY = -1 * options_$unique.data.scaleY;
-        options_$unique.element.image.cropper('scaleY', options_$unique.data.scaleY);
+    options_$uniqueId.element.modal.find('.flip-vertical').click(function() { 
+        if (!options_$uniqueId.croppable) return;
+        options_$uniqueId.data.scaleY = -1 * options_$uniqueId.data.scaleY;
+        options_$uniqueId.element.image.cropper('scaleY', options_$uniqueId.data.scaleY);
     });
     
+    
+    
 JS
-, View::POS_END) ?>
+, View::POS_END);
+
+
+// on click crop or close button
+if (isset($jsOptions['onClick'])) :
+$onClick = $jsOptions['onClick'];
+$script = <<<JS
+    $('#crop-button-$uniqueId, #close-button-$uniqueId').click($onClick);
+JS;
+$this->registerJs($script, View::POS_END);
+endif;
+?>
