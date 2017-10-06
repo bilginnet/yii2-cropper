@@ -9,6 +9,7 @@ use yii\web\View;
 /** @var $imageUrl string */
 /** @var $cropperOptions mixed */
 /** @var $inputOptions  mixed */
+/** @var $template string */
 
 
 \bilginnet\cropper\CropperAsset::register($this);
