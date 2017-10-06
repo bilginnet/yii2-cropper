@@ -20,7 +20,7 @@ class Cropper extends InputWidget
      * previewId         = #cropper-result-$uniqueId
      * modalId           = #cropper-modal-$uniqueId
      * imageId           = #cropper-image-$uniqueId
-     * inputChangeUrlId  = #cropper-image-$uniqueId
+     * inputChangeUrlId  = #cropper-url-change-input-$uniqueId
      * closeButtonId     = #close-button-$uniqueId
      * cropButtonId      = #close-button-$uniqueId
      * inputId           = #cropper-input-$uniqueId
