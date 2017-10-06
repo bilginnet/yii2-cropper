@@ -176,7 +176,7 @@ $this->registerJs(<<<JS
         
         button: {
             crop: $('#crop-button-$uniqueId'),
-            close: $('#close-button-$uniqueId'),
+            close: $('#close-button-$uniqueId')
         },
         
         data: {
