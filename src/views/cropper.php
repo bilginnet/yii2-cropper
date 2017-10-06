@@ -88,6 +88,13 @@ $template = str_replace('{preview}', $previewContent, $template);
 </div>
 
 <?php $this->registerCss('
+    .cropper-result {
+        margin-top: 10px; 
+        border: 1px dotted #bfbfbf; 
+        background-color: #f5f5f5;
+        position: relative;   
+        cursor: pointer;     
+    }    
     label[for='.$inputOptions['id'].'] {
         display: none;
     }
