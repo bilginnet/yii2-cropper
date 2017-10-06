@@ -8,6 +8,7 @@ use yii\web\View;
 /** @var $uniqueId string */
 /** @var $imageUrl string */
 /** @var $cropperOptions mixed */
+/** @var $jsOptions mixed */
 /** @var $inputOptions  mixed */
 /** @var $template string */
 
@@ -363,4 +364,14 @@ $this->registerJs(<<<JS
     });
     
 JS
-, View::POS_END) ?>
+, View::POS_END);
+
+// on click crop or close button
+if (isset($jsOptions['onClick'])) :
+    $onClick = $jsOptions['onClick'];
+    $script = <<<JS
+        $('#crop-button-$uniqueId, #close-button-$uniqueId').click($onClick);
+JS;
+    $this->registerJs($script, View::POS_END);
+endif;
+?>
