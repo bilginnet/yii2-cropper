@@ -83,12 +83,12 @@ $template = str_replace('{button}',  $input . $buttonContent, $template);
 $template = str_replace('{preview}', $previewContent, $template);
 ?>
 
-<div class="cropper-wrapper clearfix">
-    <?php echo $template ?>
-    <?= Html::hiddenInput('url-change-input-' . $uniqueId, '', [
-        'id' => 'cropper-url-change-input-' . $uniqueId,
-    ]) ?>
-</div>
+    <div class="cropper-wrapper clearfix">
+        <?php echo $template ?>
+        <?= Html::hiddenInput('url-change-input-' . $uniqueId, '', [
+            'id' => 'cropper-url-change-input-' . $uniqueId,
+        ]) ?>
+    </div>
 
 <?php $this->registerCss('
     .cropper-result {
@@ -171,7 +171,7 @@ $this->registerJs(<<<JS
         input: {
             model: $('#$inputId'),
             crop: $('#cropper-input-$uniqueId'),
-            urlChange: $('#cropper-url-change-input-$uniqueId'),
+            urlChange: $('#cropper-url-change-input-$uniqueId')
         },
         
         button: {
@@ -257,7 +257,15 @@ $this->registerJs(<<<JS
     });
     
     
-    var imageUrl_$uniqueId = '$imageUrl';    
+    var imageUrl_$uniqueId = '$imageUrl';
+    // if imageUrl is set    
+    if (imageUrl_$uniqueId !== '') {
+        options_$uniqueId.element.modal.find('.modal-body > div').html('<img src="' + imageUrl_$uniqueId + '" id="cropper-image-$uniqueId">');
+        // get image element
+        options_$uniqueId.element.image = $('#cropper-image-$uniqueId'); 
+        options_$uniqueId.element._image = document.getElementById('cropper-image-$uniqueId');
+    }
+    // when set imageSrc directly from out 
     options_$uniqueId.input.urlChange.change(function(event) {        
         var _val = $(this).val();
         imageUrl_$uniqueId = _val;
@@ -364,7 +372,7 @@ $this->registerJs(<<<JS
     });
     
 JS
-, View::POS_END);
+    , View::POS_END);
 
 // on click crop or close button
 if (isset($jsOptions['onClick'])) :
