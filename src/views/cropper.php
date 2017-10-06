@@ -34,7 +34,6 @@ $closeLabel = $cropperOptions['icons']['close'] . ' ' . Yii::t('cropper', 'Crop'
 $label = $inputOptions['label'];
 if ($label !== false) {
     $browseLabel = $cropperOptions['icons']['browse'] . ' ' . $label;
-
 }
 ?>
 
@@ -83,34 +82,10 @@ $template = str_replace('{preview}', $previewContent, $template);
 
 <div class="cropper-wrapper clearfix">
     <?php echo $template ?>
-    <?= Html::input('text','url-change-input-' . $uniqueId, '', [
+    <?= Html::hiddenInput('url-change-input-' . $uniqueId, '', [
         'id' => 'cropper-url-change-input-' . $uniqueId,
     ]) ?>
 </div>
-
-
-<?php /*
-<div class="cropper-container clearfix">
-
-    <input type="text" id="<?= $inputOptions['id'] ?>" name="<?=  $inputOptions['name'] ?>" title="" class="hidden">
-
-    <?= Html::button($browseLabel, [
-        'class' => 'btn btn-primary',
-        'data-toggle' => 'modal',
-        'data-target' => '#cropper-modal-' . $uniqueId,
-        //'data-keyboard' => 'false',
-        'data-backdrop' => 'static',
-    ]) ?>
-
-    <?php if ($cropperOptions['preview'] !== false) : ?>
-        <?php $preview = $cropperOptions['preview']; ?>
-        <div class="cropper-result" id="cropper-result-<?= $uniqueId ?>" style="margin-top: 10px; width: <?= $preview['width'] ?>px; height: <?= $preview['height'] ?>px; border: 1px dotted #bfbfbf">
-            <?php if (isset($preview['url'])) {
-                echo Html::img($preview['url'], ['width' => $preview['width'], 'height' => $preview['height']]);
-            } ?>
-        </div>
-    <?php endif; ?>
-</div> */ ?>
 
 <?php $this->registerCss('
     label[for='.$inputOptions['id'].'] {
