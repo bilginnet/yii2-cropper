@@ -16,13 +16,14 @@ class Cropper extends InputWidget
     /**
      * if it is empty will be create automatically
      *
-     * buttonId      = #cropper-select-button-$uniqueId
-     * previewId     = #cropper-result-$uniqueId
-     * modalId       = #cropper-modal-$uniqueId
-     * imageId       = #cropper-image-$uniqueId
-     * closeButtonId = #close-button-$uniqueId
-     * cropButtonId  = #close-button-$uniqueId
-     * inputId       = #cropper-input-$uniqueId
+     * buttonId          = #cropper-select-button-$uniqueId
+     * previewId         = #cropper-result-$uniqueId
+     * modalId           = #cropper-modal-$uniqueId
+     * imageId           = #cropper-image-$uniqueId
+     * inputChangeUrlId  = #cropper-image-$uniqueId
+     * closeButtonId     = #close-button-$uniqueId
+     * cropButtonId      = #close-button-$uniqueId
+     * inputId           = #cropper-input-$uniqueId
      *
      * @var string
      */
