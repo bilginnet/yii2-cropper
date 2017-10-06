@@ -232,38 +232,37 @@ $this->registerJs(<<<JS
         built: function () {
             options_$uniqueId.croppable = true;
         }
-    }    
+    }
     
     
+    // input file change
     options_$uniqueId.input.crop.change(function(event) {
-        
-        
         // cropper reset
         options_$uniqueId.croppable = false;
         options_$uniqueId.element.image.cropper('destroy');        
-        options_$uniqueId.element.modal.find('.width-warning, .height-warning').removeClass('has-success').removeClass('has-error');
-        
-        
+        options_$uniqueId.element.modal.find('.width-warning, .height-warning').removeClass('has-success').removeClass('has-error');        
         // image loading        
         if (typeof event.target.files[0] === 'undefined') {
             options_$uniqueId.element._image.src = "";
             return;
         }               
-        options_$uniqueId.element._image.src = URL.createObjectURL(event.target.files[0]);
-        
-        
+        options_$uniqueId.element._image.src = URL.createObjectURL(event.target.files[0]);                
         // cropper start
         options_$uniqueId.element.image.cropper(cropper_options_$uniqueId);        
     });
     
     
+    
+    
     var imageUrl_$uniqueId = '$imageUrl';
-    // if imageUrl is set    
-    if (imageUrl_$uniqueId !== '') {
-        options_$uniqueId.element.modal.find('.modal-body > div').html('<img src="' + imageUrl_$uniqueId + '" id="cropper-image-$uniqueId">');
-        // get image element
+    var setElement_$uniqueId = function(src) {
+        options_$uniqueId.element.modal.find('.modal-body > div').html('<img src="' + src + '" id="cropper-image-$uniqueId">');
         options_$uniqueId.element.image = $('#cropper-image-$uniqueId'); 
         options_$uniqueId.element._image = document.getElementById('cropper-image-$uniqueId');
+    };    
+    // if imageUrl is set    
+    if (imageUrl_$uniqueId !== '') {
+        setElement_$uniqueId(imageUrl_$uniqueId);        
     }
     // when set imageSrc directly from out 
     options_$uniqueId.input.urlChange.change(function(event) {        
@@ -274,18 +273,14 @@ $this->registerJs(<<<JS
         options_$uniqueId.element.image.cropper('destroy');
         options_$uniqueId.element.modal.find('.width-warning, .height-warning').removeClass('has-success').removeClass('has-error');        
         if (!options_$uniqueId.element.modal.hasClass('in')) {
-            options_$uniqueId.element.modal.find('.modal-body > div').html('<img src="' + _val + '" id="cropper-image-$uniqueId">');
-            
-            // get image element
-            options_$uniqueId.element.image = $('#cropper-image-$uniqueId'); 
-            options_$uniqueId.element._image = document.getElementById('cropper-image-$uniqueId');
-            
+            setElement_$uniqueId(_val);
             options_$uniqueId.element.modal.modal('show'); 
         }
         
     });
     options_$uniqueId.element.modal.on('shown.bs.modal', function() {        
         if (imageUrl_$uniqueId !== '') {
+            // cropper start
             options_$uniqueId.element.modal.find('.modal-body img').cropper(cropper_options_$uniqueId);
             imageUrl_$uniqueId = '';
         }       
@@ -301,14 +296,8 @@ $this->registerJs(<<<JS
         options_$uniqueId.croppedCanvas = options_$uniqueId.element.image.cropper('getCroppedCanvas', {
             width: options_$uniqueId.data.cropWidth,
             height: options_$uniqueId.data.cropHeight
-        });
-        
-        options_$uniqueId.element.result.html('<img src="' + options_$uniqueId.croppedCanvas.toDataURL() + '" id="cropper-image-$uniqueId">');
-        
-        // get image element
-        options_$uniqueId.element.image = $('#cropper-image-$uniqueId'); 
-        options_$uniqueId.element._image = document.getElementById('cropper-image-$uniqueId');
-        
+        });               
+        options_$uniqueId.element.result.html('<img src="' + options_$uniqueId.croppedCanvas.toDataURL() + '" id="cropper-image-$uniqueId">');        
         options_$uniqueId.input.model.attr('type', 'text');
         options_$uniqueId.input.model.val(options_$uniqueId.croppedCanvas.toDataURL());
     }
