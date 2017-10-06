@@ -61,6 +61,8 @@ class Cropper extends InputWidget
      */
     public $cropperOptions;
 
+    public $jsOptions;
+
     /**
      * @var array
      */
@@ -95,6 +97,7 @@ class Cropper extends InputWidget
             'uniqueId' => $this->uniqueId,
             'imageUrl' => $this->imageUrl,
             'cropperOptions' => $this->cropperOptions,
+            'jsOptions' => $this->jsOptions,
             'inputOptions' => $this->inputOptions,
             'template' => $this->template,
         ]);
