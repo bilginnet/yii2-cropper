@@ -34,6 +34,7 @@ $closeLabel = $cropperOptions['icons']['close'] . ' ' . Yii::t('cropper', 'Crop'
 $label = $inputOptions['label'];
 if ($label !== false) {
     $browseLabel = $cropperOptions['icons']['browse'] . ' ' . $label;
+
 }
 ?>
 
@@ -254,17 +255,21 @@ $this->registerJs(<<<JS
     });
     
     
-    var imageUrl_$uniqueId = '$imageUrl';
+    var imageUrl_$uniqueId = '$imageUrl';    
     options_$uniqueId.input.urlChange.change(function(event) {        
         var _val = $(this).val();
-        imageUrl_$uniqueId = _val; 
+        imageUrl_$uniqueId = _val;
         // cropper reset
         options_$uniqueId.croppable = false;
         options_$uniqueId.element.image.cropper('destroy');
         options_$uniqueId.element.modal.find('.width-warning, .height-warning').removeClass('has-success').removeClass('has-error');        
         if (!options_$uniqueId.element.modal.hasClass('in')) {
             options_$uniqueId.element.modal.find('.modal-body > div').html('<img src="' + _val + '" id="cropper-image-$uniqueId">');
-            options_$uniqueId.element.image = options_$uniqueId.element.modal.find('.modal-body img');
+            
+            // get image element
+            options_$uniqueId.element.image = $('#cropper-image-$uniqueId'); 
+            options_$uniqueId.element._image = document.getElementById('cropper-image-$uniqueId');
+            
             options_$uniqueId.element.modal.modal('show'); 
         }
         
@@ -272,6 +277,7 @@ $this->registerJs(<<<JS
     options_$uniqueId.element.modal.on('shown.bs.modal', function() {        
         if (imageUrl_$uniqueId !== '') {
             options_$uniqueId.element.modal.find('.modal-body img').cropper(cropper_options_$uniqueId);
+            imageUrl_$uniqueId = '';
         }       
     });
 
@@ -288,6 +294,11 @@ $this->registerJs(<<<JS
         });
         
         options_$uniqueId.element.result.html('<img src="' + options_$uniqueId.croppedCanvas.toDataURL() + '" id="cropper-image-$uniqueId">');
+        
+        // get image element
+        options_$uniqueId.element.image = $('#cropper-image-$uniqueId'); 
+        options_$uniqueId.element._image = document.getElementById('cropper-image-$uniqueId');
+        
         options_$uniqueId.input.model.attr('type', 'text');
         options_$uniqueId.input.model.val(options_$uniqueId.croppedCanvas.toDataURL());
     }
