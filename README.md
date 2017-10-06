@@ -105,7 +105,7 @@ Advanced usage in _form file
      * previewId         = #cropper-result-$uniqueId
      * modalId           = #cropper-modal-$uniqueId
      * imageId           = #cropper-image-$uniqueId
-     * inputChangeUrlId  = #cropper-image-$uniqueId     
+     * inputChangeUrlId  = #cropper-url-change-input-$uniqueId
      * closeButtonId     = #close-button-$uniqueId
      * cropButtonId      = #crop-button-$uniqueId
      * browseInputId     = #cropper-input-$uniqueId // fileinput in modal
