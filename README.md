@@ -101,13 +101,14 @@ Advanced usage in _form file
 ````php
  echo $form->field($model, '_image')->widget(\bilginnet\cropper\Cropper::className(), [
     /*
-     * buttonId       = #cropper-select-button-$uniqueId
-     * previewId      = #cropper-result-$uniqueId
-     * modalId        = #cropper-modal-$uniqueId
-     * imageId        = #cropper-image-$uniqueId
-     * closeButtonId  = #close-button-$uniqueId
-     * cropButtonId   = #crop-button-$uniqueId
-     * browseInputId  = #cropper-input-$uniqueId // fileinput in modal
+     * buttonId          = #cropper-select-button-$uniqueId
+     * previewId         = #cropper-result-$uniqueId
+     * modalId           = #cropper-modal-$uniqueId
+     * imageId           = #cropper-image-$uniqueId
+     * inputChangeUrlId  = #cropper-image-$uniqueId     
+     * closeButtonId     = #close-button-$uniqueId
+     * cropButtonId      = #crop-button-$uniqueId
+     * browseInputId     = #cropper-input-$uniqueId // fileinput in modal
     */
     'uniqueId' => 'image-cropper' // will create automaticaly if not set
 
