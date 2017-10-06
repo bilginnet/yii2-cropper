@@ -8,9 +8,7 @@ use yii\web\View;
 /** @var $uniqueId string */
 /** @var $imageUrl string */
 /** @var $cropperOptions mixed */
-/** @var $jsOptions mixed */
 /** @var $inputOptions  mixed */
-/** @var $template string */
 
 
 \bilginnet\cropper\CropperAsset::register($this);
@@ -18,7 +16,6 @@ use yii\web\View;
 
 // set uniqueId if its empty
 if (empty($uniqueId)) $uniqueId = uniqid('cropper_');
-
 
 
 $cropWidth = $cropperOptions['width'];
@@ -39,8 +36,14 @@ if ($label !== false) {
     $browseLabel = $cropperOptions['icons']['browse'] . ' ' . $label;
 
 }
+?>
 
 
+
+
+
+<?php
+// template
 $buttonContent = Html::button($browseLabel, [
     'class' => $cropperOptions['buttonCssClass'],
     'data-toggle' => 'modal',
@@ -52,18 +55,24 @@ $buttonContent = Html::button($browseLabel, [
 $previewContent = null;
 $previewOptions = $cropperOptions['preview'];
 if ($cropperOptions['preview'] !== false) {
-    $src = (isset($previewOptions['url'])) ? $previewOptions['url'] : null;
-    $previewImage = Html::img($src, [
-        'id' => 'cropper-image-'.$uniqueId,
-        'width' => $previewOptions['width'],
-        'height' => $previewOptions['height'],
-    ]);
+    $src = $previewOptions['url'];
+    //$previewImage = null;
+
+    $previewImage = null;
+    if (isset($previewOptions['url'])) {
+        $previewImage = Html::img($src, [
+            'id' => 'cropper-image-'.$uniqueId,
+            'width' => $previewOptions['width'],
+            'height' => $previewOptions['height'],
+        ]);
+    }
+
     $previewContent = '<div class="cropper-container clearfix">' . Html::tag('div', $previewImage, [
-        'id' => 'cropper-result-'.$uniqueId,
-        'class' => 'cropper-result',
-        'style' => 'width: '.$previewOptions['width'].'px; height: '.$previewOptions['height'].'px;',
-        'data-buttonid' => 'cropper-select-button-' . $uniqueId
-    ]) . '</div>';
+            'id' => 'cropper-result-'.$uniqueId,
+            'class' => 'cropper-result',
+            'style' => 'width: '.$previewOptions['width'].'px; height: '.$previewOptions['height'].'px;',
+            'data-buttonid' => 'cropper-select-button-' . $uniqueId
+        ]) . '</div>';
 } else {
     $previewContent = Html::img(null, ['class' => 'hidden', 'id' => 'cropper-image-'.$uniqueId]);
 }
@@ -72,19 +81,38 @@ $template = str_replace('{button}',  $input . $buttonContent, $template);
 $template = str_replace('{preview}', $previewContent, $template);
 ?>
 
-
 <div class="cropper-wrapper clearfix">
     <?php echo $template ?>
+    <?= Html::input('text','url-change-input-' . $uniqueId, '', [
+        'id' => 'cropper-url-change-input-' . $uniqueId,
+    ]) ?>
 </div>
 
+
+<?php /*
+<div class="cropper-container clearfix">
+
+    <input type="text" id="<?= $inputOptions['id'] ?>" name="<?=  $inputOptions['name'] ?>" title="" class="hidden">
+
+    <?= Html::button($browseLabel, [
+        'class' => 'btn btn-primary',
+        'data-toggle' => 'modal',
+        'data-target' => '#cropper-modal-' . $uniqueId,
+        //'data-keyboard' => 'false',
+        'data-backdrop' => 'static',
+    ]) ?>
+
+    <?php if ($cropperOptions['preview'] !== false) : ?>
+        <?php $preview = $cropperOptions['preview']; ?>
+        <div class="cropper-result" id="cropper-result-<?= $uniqueId ?>" style="margin-top: 10px; width: <?= $preview['width'] ?>px; height: <?= $preview['height'] ?>px; border: 1px dotted #bfbfbf">
+            <?php if (isset($preview['url'])) {
+                echo Html::img($preview['url'], ['width' => $preview['width'], 'height' => $preview['height']]);
+            } ?>
+        </div>
+    <?php endif; ?>
+</div> */ ?>
+
 <?php $this->registerCss('
-    .cropper-result {
-        margin-top: 10px; 
-        border: 1px dotted #bfbfbf; 
-        background-color: #f5f5f5;
-        position: relative;   
-        cursor: pointer;     
-    }    
     label[for='.$inputOptions['id'].'] {
         display: none;
     }
@@ -134,18 +162,15 @@ $template = str_replace('{preview}', $previewContent, $template);
 <?php
 $inputId = $inputOptions['id'];
 $modal = $this->render('modal', [
-    'uniqueId' => $uniqueId,
+    'unique' => $uniqueId,
     'cropperOptions' => $cropperOptions,
 ]);
 
-$this->registerJs(<<<JS
- 
-    $('body').prepend('$modal');
 
-    $('#cropper-result-$uniqueId').click(function(){
-        var buttonId = $(this).data('buttonid');        
-        $('#' + buttonId).click();
-    });
+
+$this->registerJs(<<<JS
+
+    $('body').prepend('$modal');
 
     var options_$uniqueId = {
         croppable: false,
@@ -154,13 +179,14 @@ $this->registerJs(<<<JS
         element: {
             modal: $('#cropper-modal-$uniqueId'),
             image: $('#cropper-image-$uniqueId'),
-            _image: document.getElementById('cropper-image-$uniqueId'),
-            result: $('#cropper-result-$uniqueId')        
+            _image: document.getElementById('cropper-image-$uniqueId'),            
+            result: $('#cropper-result-$uniqueId')
         },
         
         input: {
             model: $('#$inputId'),
-            crop: $('#cropper-input-$uniqueId')
+            crop: $('#cropper-input-$uniqueId'),
+            urlChange: $('#cropper-url-change-input-$uniqueId'),
         },
         
         button: {
@@ -221,53 +247,18 @@ $this->registerJs(<<<JS
         built: function () {
             options_$uniqueId.croppable = true;
         }
-    }
-    
-    
-    // if imageUrl is set
-    var imageUrl_$uniqueId = '$imageUrl';
-    if (imageUrl_$uniqueId !== '') {               
-        options_$uniqueId.element._image.src = imageUrl_$uniqueId;
-        options_$uniqueId.element.image.css('display', 'none');
     }    
-    
-    // when set imageSrc directly from out 
-    var imageSrc_$uniqueId = '';
-    options_$uniqueId.element.image.on('load', function () {         
-        imageSrc_$uniqueId = options_$uniqueId.element.image.attr('src');
-        // cropper reset
-        options_$uniqueId.croppable = false;
-        options_$uniqueId.element.image.cropper('destroy');        
-        options_$uniqueId.element.modal.find('.width-warning, .height-warning').removeClass('has-success').removeClass('has-error');        
-        if (!options_$uniqueId.element.modal.hasClass('in')) {
-            options_$uniqueId.element.image.css('display', 'none');
-            options_$uniqueId.element.modal.modal('show'); 
-        }
-    });        
-    options_$uniqueId.element.modal.on('shown.bs.modal', function() {           
-        if (imageUrl_$uniqueId !== '') {
-            options_$uniqueId.element.image.css('display', 'block');           
-            // cropper start
-            options_$uniqueId.element.image.cropper(cropper_options_$uniqueId);    
-        }
-        if (imageSrc_$uniqueId !== '') {            
-            options_$uniqueId.element.image.css('display', 'block');
-            // cropper start
-            options_$uniqueId.element.image.cropper(cropper_options_$uniqueId);
-        }
-    });
-            
-    
-    
     
     
     options_$uniqueId.input.crop.change(function(event) {
-
+        
+        
         // cropper reset
         options_$uniqueId.croppable = false;
         options_$uniqueId.element.image.cropper('destroy');        
         options_$uniqueId.element.modal.find('.width-warning, .height-warning').removeClass('has-success').removeClass('has-error');
-               
+        
+        
         // image loading        
         if (typeof event.target.files[0] === 'undefined') {
             options_$uniqueId.element._image.src = "";
@@ -275,12 +266,32 @@ $this->registerJs(<<<JS
         }               
         options_$uniqueId.element._image.src = URL.createObjectURL(event.target.files[0]);
         
-                
-        // cropper start
-        options_$uniqueId.element.image.cropper(cropper_options_$uniqueId);
         
+        // cropper start
+        options_$uniqueId.element.image.cropper(cropper_options_$uniqueId);        
     });
     
+    
+    var imageUrl_$uniqueId = '$imageUrl';
+    options_$uniqueId.input.urlChange.change(function(event) {        
+        var _val = $(this).val();
+        imageUrl_$uniqueId = _val; 
+        // cropper reset
+        options_$uniqueId.croppable = false;
+        options_$uniqueId.element.image.cropper('destroy');
+        options_$uniqueId.element.modal.find('.width-warning, .height-warning').removeClass('has-success').removeClass('has-error');        
+        if (!options_$uniqueId.element.modal.hasClass('in')) {
+            options_$uniqueId.element.modal.find('.modal-body > div').html('<img src="' + _val + '" id="cropper-image-$uniqueId">');
+            options_$uniqueId.element.image = options_$uniqueId.element.modal.find('.modal-body img');
+            options_$uniqueId.element.modal.modal('show'); 
+        }
+        
+    });
+    options_$uniqueId.element.modal.on('shown.bs.modal', function() {        
+        if (imageUrl_$uniqueId !== '') {
+            options_$uniqueId.element.modal.find('.modal-body img').cropper(cropper_options_$uniqueId);
+        }       
+    });
 
     
     
@@ -288,14 +299,13 @@ $this->registerJs(<<<JS
     function setCrop$uniqueId() {        
         if (!options_$uniqueId.croppable) {
             return;
-        }
-        
+        }        
         options_$uniqueId.croppedCanvas = options_$uniqueId.element.image.cropper('getCroppedCanvas', {
             width: options_$uniqueId.data.cropWidth,
             height: options_$uniqueId.data.cropHeight
         });
-        options_$uniqueId.element.result.html('<img src="' + options_$uniqueId.croppedCanvas.toDataURL() + '">');
         
+        options_$uniqueId.element.result.html('<img src="' + options_$uniqueId.croppedCanvas.toDataURL() + '" id="cropper-image-$uniqueId">');
         options_$uniqueId.input.model.attr('type', 'text');
         options_$uniqueId.input.model.val(options_$uniqueId.croppedCanvas.toDataURL());
     }
@@ -309,6 +319,10 @@ $this->registerJs(<<<JS
             options_$uniqueId.input.crop.click();
         }
     });
+    
+    
+     
+    
     
   
     options_$uniqueId.element.modal.find('.move-left').click(function() { 
@@ -354,18 +368,5 @@ $this->registerJs(<<<JS
         options_$uniqueId.element.image.cropper('scaleY', options_$uniqueId.data.scaleY);
     });
     
-    
-    
 JS
-, View::POS_END);
-
-
-// on click crop or close button
-if (isset($jsOptions['onClick'])) :
-$onClick = $jsOptions['onClick'];
-$script = <<<JS
-    $('#crop-button-$uniqueId, #close-button-$uniqueId').click($onClick);
-JS;
-$this->registerJs($script, View::POS_END);
-endif;
-?>
+, View::POS_END) ?>
