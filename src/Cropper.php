@@ -58,12 +58,12 @@ class Cropper extends InputWidget
      * @var $cropperOptions []
      *
      */
-
     public $cropperOptions;
-    public $jsOptions;
 
+    /**
+     * @var array
+     */
     private $inputOptions;
-
 
     /**
      * @var  bool | string
@@ -76,8 +76,6 @@ class Cropper extends InputWidget
      * @var string
      */
     public $template = '{button} {preview}';
-
-
 
     public function init()
     {
@@ -96,7 +94,6 @@ class Cropper extends InputWidget
             'uniqueId' => $this->uniqueId,
             'imageUrl' => $this->imageUrl,
             'cropperOptions' => $this->cropperOptions,
-            'jsOptions' => $this->jsOptions,
             'inputOptions' => $this->inputOptions,
             'template' => $this->template,
         ]);
@@ -114,7 +111,6 @@ class Cropper extends InputWidget
     }
 
 
-
     private function setCropperOptions()
     {
         $options = $this->cropperOptions;
@@ -126,12 +122,12 @@ class Cropper extends InputWidget
         $aspectRatio = $options['width'] / $options['height'];
         if (!isset($options['preview']['url']) || empty($options['preview']['url'])) $options['preview']['url'] = null;
         if (!isset($options['preview']['width'])) {
-			$defaultPreviewWidth = 100;
-			if ($options['width'] < $defaultPreviewWidth)
-				$options['preview']['width'] = $options['width'];
-			else 
-				$options['preview']['width'] = $defaultPreviewWidth;
-		}
+            $defaultPreviewWidth = 100;
+            if ($options['width'] < $defaultPreviewWidth)
+                $options['preview']['width'] = $options['width'];
+            else
+                $options['preview']['width'] = $defaultPreviewWidth;
+        }
         if (!isset($options['preview']['height'])) $options['preview']['height'] = $options['preview']['width'] / $aspectRatio;
 
 
@@ -156,11 +152,10 @@ class Cropper extends InputWidget
     }
 
 
-
     private function setInputOptions()
     {
         $label = $this->label;
-        if (empty($label) || (is_bool($label) && $label)) {
+        if ($label === null || (is_bool($label) && $label)) {
             $label = $this->model->getAttributeLabel($this->attribute);
         }
         $className = StringHelper::basename(get_class($this->model));
