@@ -65,8 +65,8 @@ class Cropper extends InputWidget
      * 'onClick' => 'function(event){
      *      // when click crop or close button
      *      // do something
-     * }'
-     * @var []
+    }'
+     * @var
      */
     public $jsOptions;
 
@@ -94,11 +94,18 @@ class Cropper extends InputWidget
         $this->i18n();
         $this->setCropperOptions();
         $this->setInputOptions();
+        if (empty($this->uniqueId)) $this->uniqueId = uniqid('cropper_'); // set uniqueId if its empty
     }
 
     public function run()
     {
         parent::run();
+
+        $this->view->registerCss('
+            label[for='.$this->options['id'].'] {
+                display: none;
+            }
+        ');
 
         return $this->render('cropper', [
             'uniqueId' => $this->uniqueId,
@@ -171,9 +178,16 @@ class Cropper extends InputWidget
         }
         $className = StringHelper::basename(get_class($this->model));
         $attribute = $this->attribute;
+
+        //$name = $className . "[$attribute]";
+        //$id = $this->options['id'];
+
+        $name = (isset($this->name) && !empty($this->name)) ? $this->name : $className . "[$attribute]";
+        $id = $this->uniqueId . '-' . $this->options['id'];
+
         $inputOptions = [
-            'id' => $this->options['id'],
-            'name' => $className . "[$attribute]",
+            'id' => $id, //$this->options['id'],
+            'name' => $name,
             'label' => $label, //$this->model->getAttributeLabel($this->attribute)
             'value' => $this->value,
         ];
