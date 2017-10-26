@@ -16,8 +16,7 @@ use yii\web\View;
 \bilginnet\cropper\CropperAsset::register($this);
 
 
-// set uniqueId if its empty
-if (empty($uniqueId)) $uniqueId = uniqid('cropper_');
+
 
 
 $cropWidth = $cropperOptions['width'];
@@ -36,7 +35,6 @@ $closeLabel = $cropperOptions['icons']['close'] . ' ' . Yii::t('cropper', 'Crop'
 $label = $inputOptions['label'];
 if ($label !== false) {
     $browseLabel = $cropperOptions['icons']['browse'] . ' ' . $label;
-
 }
 ?>
 
@@ -69,10 +67,37 @@ if ($cropperOptions['preview'] !== false) {
         ]);
     }
 
+    if (is_string($previewOptions['width'])) {
+        if (strstr($previewOptions['width'], '%') || strstr($previewOptions['width'], 'px')) {
+            $previewWidth = $previewOptions['width'];
+            $previewHeight = $previewOptions['width'];
+        } else {
+            $previewWidth = $previewOptions['width'] . 'px';
+            $previewHeight = ($previewOptions['width'] / $aspectRatio) . 'px' ;
+        }
+    } else if (is_integer($previewOptions['width'])) {
+        $previewWidth = $previewOptions['width'] . 'px';
+        $previewHeight = ($previewOptions['width'] / $aspectRatio) . 'px';
+    }
+
+    if (isset($previewOptions['height'])) {
+        if (is_string($previewOptions['height'])) {
+            if (strstr($previewOptions['height'], '%') || strstr($previewOptions['height'], 'px')) {
+                $previewHeight = $previewOptions['height'];
+            } else {
+                $previewHeight = $previewOptions['height'] . 'px';
+            }
+        } else if (is_integer($previewOptions['height'])) {
+            $previewHeight = $previewOptions['height'] . 'px';
+        }
+    }
+
+
+
     $previewContent = '<div class="cropper-container clearfix">' . Html::tag('div', $previewImage, [
             'id' => 'cropper-result-'.$uniqueId,
             'class' => 'cropper-result',
-            'style' => 'width: '.$previewOptions['width'].'px; height: '.$previewOptions['height'].'px;',
+            'style' => 'width: '.$previewWidth.'; height: '.$previewHeight.';',
             'data-buttonid' => 'cropper-select-button-' . $uniqueId
         ]) . '</div>';
 } else {
@@ -83,12 +108,12 @@ $template = str_replace('{button}',  $input . $buttonContent, $template);
 $template = str_replace('{preview}', $previewContent, $template);
 ?>
 
-    <div class="cropper-wrapper clearfix">
-        <?php echo $template ?>
-        <?= Html::hiddenInput('url-change-input-' . $uniqueId, '', [
-            'id' => 'cropper-url-change-input-' . $uniqueId,
-        ]) ?>
-    </div>
+<div class="cropper-wrapper clearfix">
+    <?php echo $template ?>
+    <?= Html::hiddenInput('url-change-input-' . $uniqueId, '', [
+        'id' => 'cropper-url-change-input-' . $uniqueId,
+    ]) ?>
+</div>
 
 <?php $this->registerCss('
     .cropper-result {
@@ -97,9 +122,6 @@ $template = str_replace('{preview}', $previewContent, $template);
         background-color: #f5f5f5;
         position: relative;   
         cursor: pointer;     
-    }    
-    label[for='.$inputOptions['id'].'] {
-        display: none;
     }
     #cropper-modal-'.$uniqueId.' img{
         max-width: 100%;
@@ -298,7 +320,7 @@ $this->registerJs(<<<JS
             height: options_$uniqueId.data.cropHeight
         });               
         options_$uniqueId.element.result.html('<img src="' + options_$uniqueId.croppedCanvas.toDataURL() + '" id="cropper-image-$uniqueId">');        
-        options_$uniqueId.input.model.attr('type', 'text');
+        options_$uniqueId.input.model.attr('type', 'text');        
         options_$uniqueId.input.model.val(options_$uniqueId.croppedCanvas.toDataURL());
     }
     
