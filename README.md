@@ -128,8 +128,8 @@ Advanced usage in _form file
             'url' => '', // set in update action // (!$model->isNewRecord && !empty($model->image)) ? Yii::getAlias('@uploadUrl/'.$model->image) : '' // or null 
             // you can set width as string '100%'
             // if width is string then you must set height to
-            'width' => 100, // default 100 // default is cropperWidth if cropperWidth < 100
-            'height' => 100, // Will calculate automatically by aspect ratio if not set
+            'width' => 100, // must be specified
+            'height' => 100, // must be specified
         ],
 
         // optional // default following code
@@ -189,10 +189,11 @@ jsOptions[]
         'height' => 100, // must be specified
      ],
      'jsOptions' => [
+        'pos' => View::POS_READY,
         'onClick' => 'function(event){
               // when click crop or close button 
               // do something 
-        }'
+        }'        
      ],
 ]);
 ````
