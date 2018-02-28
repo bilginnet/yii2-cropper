@@ -6,7 +6,9 @@ namespace bilginnet\cropper;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\bootstrap\InputWidget;
+use yii\helpers\ArrayHelper;
 use yii\helpers\StringHelper;
+use yii\web\View;
 
 /**
  * @author Ercan Bilgin <bilginnet@gmail.com>
@@ -71,11 +73,6 @@ class Cropper extends InputWidget
     public $jsOptions;
 
     /**
-     * @var array
-     */
-    private $inputOptions;
-
-    /**
      * @var  bool | string
      */
     public $label;
@@ -94,9 +91,9 @@ class Cropper extends InputWidget
         if (empty($this->uniqueId)) $this->uniqueId = uniqid('cropper_'); // set uniqueId if its empty
 
         $this->i18n();
+        $this->setJsOptions();
         $this->setCropperOptions();
-        $this->setInputOptions();
-
+        $this->setInputLabel();
     }
 
     public function run()
@@ -110,15 +107,18 @@ class Cropper extends InputWidget
         ');
 
         return $this->render('cropper', [
+            'model' => $this->model,
+            'attribute' => $this->attribute,
+            'name' => isset($this->name) ? $this->name : null,
+            'value' => $this->value,
+            'label' => $this->label,
             'uniqueId' => $this->uniqueId,
             'imageUrl' => $this->imageUrl,
             'cropperOptions' => $this->cropperOptions,
             'jsOptions' => $this->jsOptions,
-            'inputOptions' => $this->inputOptions,
             'template' => $this->template,
         ]);
     }
-
 
     public function i18n()
     {
@@ -130,7 +130,6 @@ class Cropper extends InputWidget
         }
     }
 
-
     private function setCropperOptions()
     {
         $options = $this->cropperOptions;
@@ -139,21 +138,26 @@ class Cropper extends InputWidget
             throw new InvalidConfigException(Yii::t('cropper', 'Either "cropWidth" and "cropHeight" properties must be specified.'));
         }
 
-        $aspectRatio = $options['width'] / $options['height'];
+        //$aspectRatio = $options['width'] / $options['height'];
         if (!isset($options['preview']['url']) || empty($options['preview']['url'])) $options['preview']['url'] = null;
-        if (!isset($options['preview']['width'])) {
+        /*if (!isset($options['preview']['width'])) {
             $defaultPreviewWidth = 100;
             if ($options['width'] < $defaultPreviewWidth)
                 $options['preview']['width'] = $options['width'];
             else
                 $options['preview']['width'] = $defaultPreviewWidth;
         }
-        if (!isset($options['preview']['height'])) $options['preview']['height'] = $options['preview']['width'] / $aspectRatio;
+        if (!isset($options['preview']['height'])) $options['preview']['height'] = $options['preview']['width'] / $aspectRatio; */
+
+        if ($options['preview'] !== false) {
+            $previewSizes = $this->getPreviewSizes($options);
+            $options['preview']['width'] = $previewSizes['width'];
+            $options['preview']['height'] = $previewSizes['height'];
+        }
+
 
 
         if (!isset($options['buttonCssClass'])) $options['buttonCssClass'] = 'btn btn-primary';
-
-
         if (!isset($options['icons']['browse'])) $options['icons']['browse'] = '<i class="fa fa-image"></i>';
         if (!isset($options['icons']['crop'])) $options['icons']['crop'] = '<i class="fa fa-crop"></i>';
         if (!isset($options['icons']['close'])) $options['icons']['close'] = '<i class="fa fa-crop"></i>';
@@ -171,28 +175,61 @@ class Cropper extends InputWidget
         $this->cropperOptions = $options;
     }
 
+    private function getPreviewSizes($options)
+    {
+        $previewWidth = 100;
+        $previewHeight = 100;
 
-    private function setInputOptions()
+        if (!isset($options['preview']['width'])) {
+            $previewWidth = ($options['width'] >= 100) ? $options['width'] : $defaultSize;
+        } else {
+            if (is_string($options['preview']['width'])) {
+                if (strstr($options['preview']['width'], '%') || strstr($options['preview']['width'], 'px')) {
+                    $previewWidth = $options['preview']['width'];
+                } else if ((int) $options['preview']['width'] > 0){
+                    $previewWidth = $options['preview']['width'] . 'px';
+                }
+            }
+            else if (is_integer($options['preview']['width'])) {
+                $previewWidth = $options['preview']['width'] . 'px';
+            }
+        }
+
+        if (!isset($options['preview']['height'])) {
+            $previewHeight = ($options['height'] >= 100) ? $options['height'] : $defaultSize;
+        } else {
+            if (is_string($options['preview']['height'])) {
+                if (strstr($options['preview']['height'], '%') || strstr($options['preview']['height'], 'px')) {
+                    $previewHeight = $options['preview']['height'];
+                } else if ((int) $options['preview']['height'] > 0){
+                    $previewHeight = $options['preview']['height'] . 'px';
+                }
+            } else if (is_integer($options['preview']['height'])) {
+                $previewHeight = $options['preview']['height'] . 'px';
+            }
+        }
+
+
+        return ['width' => $previewWidth, 'height' => $previewHeight];
+    }
+
+    private function setInputLabel()
     {
         $label = $this->label;
         if ($label === null || (is_bool($label) && $label)) {
             $label = $this->model->getAttributeLabel($this->attribute);
         }
-        $className = StringHelper::basename(get_class($this->model));
-        $attribute = $this->attribute;
 
-        //$name = $className . "[$attribute]";
-        //$id = $this->options['id'];
+        $this->label = $label;
+    }
 
-        $name = (isset($this->name) && !empty($this->name)) ? $this->name : $className . "[$attribute]";
-        $id = $this->uniqueId . '-' . $this->options['id'];
-
-        $inputOptions = [
-            'id' => $id, //$this->options['id'],
-            'name' => $name,
-            'label' => $label, //$this->model->getAttributeLabel($this->attribute)
-            'value' => $this->value,
-        ];
-        $this->inputOptions = $inputOptions;
+    private function setJsOptions()
+    {
+        $posArray = [View::POS_END, View::POS_READY, View::POS_HEAD, View::POS_LOAD, View::POS_BEGIN];
+        $jsOptions = $this->jsOptions;
+        if(!isset($jsOptions['pos']) || (isset($jsOptions['pos']) && !ArrayHelper::isIn($jsOptions['pos'], $posArray))) {
+            $jsOptions['pos'] = View::POS_END;
+        }
+        $this->jsOptions = $jsOptions;
     }
 }
