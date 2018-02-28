@@ -1,49 +1,49 @@
 <?php
-
-use yii\bootstrap\Html;
-use yii\web\View;
-
-
 /** @var $this View */
+/** @var $model \yii\db\ActiveRecord */
+/** @var $name string */
+/** @var $attribute string */
+/** @var $value mixed */
+/** @var $label mixed */
 /** @var $uniqueId string */
 /** @var $imageUrl string */
 /** @var $cropperOptions mixed */
 /** @var $jsOptions mixed */
-/** @var $inputOptions  mixed */
 /** @var $template string */
 
 
-\bilginnet\cropper\CropperAsset::register($this);
+use yii\bootstrap\Html;
+use yii\web\View;
 
-
-
+switch ($jsOptions['pos']) {
+    default:
+    case View::POS_END:
+        \bilginnet\cropper\CropperAsset::register($this);
+        break;
+    case View::POS_BEGIN:
+        \bilginnet\cropper\CropperBeginAsset::register($this);
+        break;
+    case View::POS_HEAD:
+        \bilginnet\cropper\CropperHeadAsset::register($this);
+        break;
+    case View::POS_LOAD:
+        \bilginnet\cropper\CropperLoadAsset::register($this);
+        break;
+    case View::POS_READY:
+        \bilginnet\cropper\CropperReadyAsset::register($this);
+        break;
+}
 
 
 $cropWidth = $cropperOptions['width'];
 $cropHeight = $cropperOptions['height'];
 $aspectRatio = $cropWidth / $cropHeight;
-
-
-
-
-
-
 $browseLabel = $cropperOptions['icons']['browse'] . ' ' . Yii::t('cropper', 'Browse');
 $cropLabel = $cropperOptions['icons']['crop'] . ' ' . Yii::t('cropper', 'Crop');
 $closeLabel = $cropperOptions['icons']['close'] . ' ' . Yii::t('cropper', 'Crop') . ' & ' . Yii::t('cropper', 'Close');
+if ($label !== false) $browseLabel = $cropperOptions['icons']['browse'] . ' ' . $label;
 
-$label = $inputOptions['label'];
-if ($label !== false) {
-    $browseLabel = $cropperOptions['icons']['browse'] . ' ' . $label;
-}
-?>
-
-
-
-
-
-<?php
-// template
+// button template
 $buttonContent = Html::button($browseLabel, [
     'class' => $cropperOptions['buttonCssClass'],
     'data-toggle' => 'modal',
@@ -52,58 +52,47 @@ $buttonContent = Html::button($browseLabel, [
     'data-backdrop' => 'static',
     'id' => 'cropper-select-button-' . $uniqueId,
 ]);
+
+// preview template
 $previewContent = null;
 $previewOptions = $cropperOptions['preview'];
 if ($cropperOptions['preview'] !== false) {
     $src = $previewOptions['url'];
-    //$previewImage = null;
+    $previewWidth = $previewOptions['width'];
+    $previewHeight = $previewOptions['height'];
 
-    $previewImage = null;
-    if (isset($previewOptions['url'])) {
-        $previewImage = Html::img($src, [
-            'id' => 'cropper-image-'.$uniqueId,
-            'width' => $previewOptions['width'],
-            'height' => $previewOptions['height'],
-        ]);
-    }
-
-    if (is_string($previewOptions['width'])) {
-        if (strstr($previewOptions['width'], '%') || strstr($previewOptions['width'], 'px')) {
-            $previewWidth = $previewOptions['width'];
-            $previewHeight = $previewOptions['width'];
-        } else {
-            $previewWidth = $previewOptions['width'] . 'px';
-            $previewHeight = ($previewOptions['width'] / $aspectRatio) . 'px' ;
-        }
-    } else if (is_integer($previewOptions['width'])) {
-        $previewWidth = $previewOptions['width'] . 'px';
-        $previewHeight = ($previewOptions['width'] / $aspectRatio) . 'px';
-    }
-
-    if (isset($previewOptions['height'])) {
-        if (is_string($previewOptions['height'])) {
-            if (strstr($previewOptions['height'], '%') || strstr($previewOptions['height'], 'px')) {
-                $previewHeight = $previewOptions['height'];
-            } else {
-                $previewHeight = $previewOptions['height'] . 'px';
-            }
-        } else if (is_integer($previewOptions['height'])) {
-            $previewHeight = $previewOptions['height'] . 'px';
-        }
-    }
-
-
-
-    $previewContent = '<div class="cropper-container clearfix">' . Html::tag('div', $previewImage, [
+    $previewImage = Html::img($src, ['id' => 'cropper-image-'.$uniqueId, 'style' => "width: $previewWidth; height: $previewHeight;"]);
+    $previewContent = '<div class="cropper-container clearfix">' .
+        Html::tag('div', $previewImage, [
             'id' => 'cropper-result-'.$uniqueId,
             'class' => 'cropper-result',
-            'style' => 'width: '.$previewWidth.'; height: '.$previewHeight.';',
-            'data-buttonid' => 'cropper-select-button-' . $uniqueId
-        ]) . '</div>';
+            'style' => "width: $previewWidth; height: $previewHeight;",
+            'data-buttonid' => 'cropper-select-button-' . $uniqueId,
+            'onclick' => 'js: $("#cropper-select-button-'.$uniqueId.'").click()',
+        ]) .
+    '</div>';
 } else {
     $previewContent = Html::img(null, ['class' => 'hidden', 'id' => 'cropper-image-'.$uniqueId]);
 }
-$input = '<input type="text" id="'.$inputOptions['id'].'" name="'.$inputOptions['name'].'" title="" style="display: none;" value="'.$inputOptions['value'].'">';
+
+
+// input template
+if (!empty($name)) {
+    $input = Html::tag('div', Html::input('text', $name, $value, [
+        'id' => $uniqueId.'-input',
+        'class' => 'hidden'
+    ]), ['id' => $uniqueId, 'class' => '',]);
+    $inputId = $uniqueId.'-input';
+} else {
+    $input = Html::tag('div', Html::activeTextInput($model, $attribute, [
+        'value' => $value,
+        'class' => 'hidden',
+    ]), ['id' => $uniqueId, 'class' => '',]);
+    $inputId = Html::getInputId($model, $attribute);
+}
+
+
+// set template
 $template = str_replace('{button}',  $input . $buttonContent, $template);
 $template = str_replace('{preview}', $previewContent, $template);
 ?>
@@ -167,12 +156,10 @@ $template = str_replace('{preview}', $previewContent, $template);
 
 
 <?php
-$inputId = $inputOptions['id'];
 $modal = $this->render('modal', [
     'unique' => $uniqueId,
     'cropperOptions' => $cropperOptions,
 ]);
-
 
 
 $this->registerJs(<<<JS
@@ -338,7 +325,7 @@ $this->registerJs(<<<JS
      
     
     
-  
+
     options_$uniqueId.element.modal.find('.move-left').click(function() { 
         if (!options_$uniqueId.croppable) return;
         options_$uniqueId.element.image.cropper('move', -10, 0);
