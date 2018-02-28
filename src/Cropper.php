@@ -67,7 +67,7 @@ class Cropper extends InputWidget
      * 'onClick' => 'function(event){
      *      // when click crop or close button
      *      // do something
-    }'
+     * }'
      * @var
      */
     public $jsOptions;
