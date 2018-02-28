@@ -189,7 +189,7 @@ jsOptions[]
         'height' => 100, // must be specified
      ],
      'jsOptions' => [
-        'pos' => View::POS_READY,
+        'pos' => View::POS_END, // default is POS_END if not specified
         'onClick' => 'function(event){
               // when click crop or close button 
               // do something 
