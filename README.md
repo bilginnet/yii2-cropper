@@ -102,6 +102,8 @@ Advanced usage in _form file
 ````php
  echo $form->field($model, '_image')->widget(\bilginnet\cropper\Cropper::className(), [
     /*
+     * elements of this widget
+     *
      * buttonId          = #cropper-select-button-$uniqueId
      * previewId         = #cropper-result-$uniqueId
      * modalId           = #cropper-modal-$uniqueId
