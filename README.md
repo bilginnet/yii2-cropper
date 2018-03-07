@@ -127,7 +127,7 @@ Advanced usage in _form file
         // optional
         // url must be set in update action
         'preview' => [
-            'url' => '', // set in update action // (!empty($model->image)) ? Yii::getAlias('@uploadUrl/'.$model->image) : null
+            'url' => '', // (!empty($model->image)) ? Yii::getAlias('@uploadUrl/'.$model->image) : null
             'width' => 100, // must be specified // you can set as string '100%'
             'height' => 100, // must be specified // you can set as string '100%'
         ],
