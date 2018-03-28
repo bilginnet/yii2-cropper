@@ -139,7 +139,7 @@ class Cropper extends InputWidget
         }
 
         //$aspectRatio = $options['width'] / $options['height'];
-        if (!isset($options['preview']['url']) || empty($options['preview']['url'])) $options['preview']['url'] = null;
+
         /*if (!isset($options['preview']['width'])) {
             $defaultPreviewWidth = 100;
             if ($options['width'] < $defaultPreviewWidth)
@@ -149,14 +149,23 @@ class Cropper extends InputWidget
         }
         if (!isset($options['preview']['height'])) $options['preview']['height'] = $options['preview']['width'] / $aspectRatio; */
 
-        if ($options['preview'] !== false) {
+
+        // preview options
+        if (isset($options['preview']) && $options['preview'] !== false) {
+            if (!isset($options['preview']['url'])) {
+                $options['preview']['url'] = null;
+            } else if (empty($options['preview']['url'])){
+                $options['preview']['url'] = null;
+            }
             $previewSizes = $this->getPreviewSizes($options);
             $options['preview']['width'] = $previewSizes['width'];
             $options['preview']['height'] = $previewSizes['height'];
+        } else {
+            $options['preview'] = false;
         }
 
 
-
+        // button & icons options
         if (!isset($options['buttonCssClass'])) $options['buttonCssClass'] = 'btn btn-primary';
         if (!isset($options['icons']['browse'])) $options['icons']['browse'] = '<i class="fa fa-image"></i>';
         if (!isset($options['icons']['crop'])) $options['icons']['crop'] = '<i class="fa fa-crop"></i>';
