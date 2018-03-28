@@ -104,14 +104,29 @@ $template = str_replace('{preview}', $previewContent, $template);
     ]) ?>
 </div>
 
-<?php $this->registerCss('
+<?php
+if ($cropperOptions['preview'] !== false) {
+
+    $this->registerCss('
     .cropper-result {
         margin-top: 10px; 
         border: 1px dotted #bfbfbf; 
         background-color: #f5f5f5;
         position: relative;   
         cursor: pointer;     
-    }
+    }');
+
+
+}
+?>
+<?php $this->registerCss('
+    /*.cropper-result {
+        margin-top: 10px; 
+        border: 1px dotted #bfbfbf; 
+        background-color: #f5f5f5;
+        position: relative;   
+        cursor: pointer;     
+    }*/
     #cropper-modal-'.$uniqueId.' img{
         max-width: 100%;
     }
