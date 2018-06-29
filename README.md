@@ -1,4 +1,4 @@
-# yii2-croppper
+# yii2-cropper
 Yii2 Image Cropper InputWidget
 
 [![Minimum PHP Version](http://img.shields.io/badge/php-%3E%3D%205.4-8892BF.svg)](https://php.net/)
