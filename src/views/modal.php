@@ -30,7 +30,7 @@ echo '<div class="modal fade" tabindex="-1" role="dialog" id="cropper-modal-'. $
                     .'<div class="col-xs-12 text-left">'
                         .'<div class="alert alert-warning alert-dismissible">'
                             .'<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'
-                            .Yii::t('cropper', 'Double click: toggle between "move image" or "redraw area"')
+                            .Yii::t('cropper', 'Double click: toggle between "move image" or "redraw area".')
                         .'</div>'
                     .'</div>'
                     .'<div class="col-sm-3">'
