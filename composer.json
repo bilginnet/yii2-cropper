@@ -19,7 +19,7 @@
   },
   "autoload": {
     "psr-4": {
-      "bilginnet\\plupload\\": "src/"
+      "bilginnet\\cropper\\": "src/"
     }
   },
   "extra": {
