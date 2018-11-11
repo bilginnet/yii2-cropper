@@ -190,7 +190,7 @@ class Cropper extends InputWidget
         $previewHeight = 100;
 
         if (!isset($options['preview']['width'])) {
-            $previewWidth = ($options['width'] >= 100) ? $options['width'] : $defaultSize;
+            $previewWidth = ($options['width'] >= 100) ? $options['width'] : $previewWidth;
         } else {
             if (is_string($options['preview']['width'])) {
                 if (strstr($options['preview']['width'], '%') || strstr($options['preview']['width'], 'px')) {
@@ -205,7 +205,7 @@ class Cropper extends InputWidget
         }
 
         if (!isset($options['preview']['height'])) {
-            $previewHeight = ($options['height'] >= 100) ? $options['height'] : $defaultSize;
+            $previewHeight = ($options['height'] >= 100) ? $options['height'] : $previewHeight;
         } else {
             if (is_string($options['preview']['height'])) {
                 if (strstr($options['preview']['height'], '%') || strstr($options['preview']['height'], 'px')) {
