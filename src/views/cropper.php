@@ -182,7 +182,7 @@ $this->registerJs(<<<JS
     $('body').prepend('$modal');
 
     var options_$uniqueId = {
-        croppable: false,
+        croppable: true,
         croppedCanvas: '',
         
         element: {
@@ -229,15 +229,15 @@ $this->registerJs(<<<JS
         responsive: false,
         crop: function (e) {
 
-            options_$uniqueId.data.width = Math.round(e.width);
-            options_$uniqueId.data.height = Math.round(e.height);
-            options_$uniqueId.data.X = e.scaleX;
-            options_$uniqueId.data.Y = e.scaleY;                                               
+            options_$uniqueId.data.width = Math.round(e.detail.width);
+            options_$uniqueId.data.height = Math.round(e.detail.height);
+            options_$uniqueId.data.X = e.detail.scaleX;
+            options_$uniqueId.data.Y = e.detail.scaleY;                                               
             
-            options_$uniqueId.inputData.width.val(Math.round(e.width));
-            options_$uniqueId.inputData.height.val(Math.round(e.height));
-            options_$uniqueId.inputData.X.val(Math.round(e.x));
-            options_$uniqueId.inputData.Y.val(Math.round(e.y));                
+            options_$uniqueId.inputData.width.val(Math.round(e.detail.width));
+            options_$uniqueId.inputData.height.val(Math.round(e.detail.height));
+            options_$uniqueId.inputData.X.val(Math.round(e.detail.x));
+            options_$uniqueId.inputData.Y.val(Math.round(e.detail.y));                
             
             
             if (options_$uniqueId.data.width < options_$uniqueId.data.cropWidth) {
@@ -262,7 +262,7 @@ $this->registerJs(<<<JS
     // input file change
     options_$uniqueId.input.crop.change(function(event) {
         // cropper reset
-        options_$uniqueId.croppable = false;
+        options_$uniqueId.croppable = true;
         options_$uniqueId.element.image.cropper('destroy');        
         options_$uniqueId.element.modal.find('.width-warning, .height-warning').removeClass('has-success').removeClass('has-error');        
         // image loading        
@@ -293,7 +293,7 @@ $this->registerJs(<<<JS
         var _val = $(this).val();
         imageUrl_$uniqueId = _val;
         // cropper reset
-        options_$uniqueId.croppable = false;
+        options_$uniqueId.croppable = true;
         options_$uniqueId.element.image.cropper('destroy');
         options_$uniqueId.element.modal.find('.width-warning, .height-warning').removeClass('has-success').removeClass('has-error');        
         if (!options_$uniqueId.element.modal.hasClass('in')) {
