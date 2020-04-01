@@ -92,7 +92,7 @@ class Cropper extends InputWidget
         parent::init();
 
         if (empty($this->uniqueId)) {
-            $this->uniqueId = uniqid('cropper_', true); // set uniqueId if its empty
+            $this->uniqueId = uniqid('cropper_'); // set uniqueId if its empty
         }
 
         $this->i18n();

@@ -14,13 +14,14 @@ use yii\bootstrap\BootstrapPluginAsset;
  */
 class CropperReadyAsset extends AssetBundle
 {
-    public $sourcePath = '@vendor/npm-asset/cropperjs/dist';
+    public $sourcePath = '@vendor/npm-asset';
     public $jsOptions = ['position' => View::POS_READY];
     public $css = [
-        'cropper.css',
+        'cropperjs/dist/cropper.css',
     ];
     public $js = [
-        'cropper.js'
+        'cropperjs/dist/cropper.js',
+        'jquery-cropper/dist/jquery-cropper.js',
     ];
     public $depends = [
         YiiAsset::class,
