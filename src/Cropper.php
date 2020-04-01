@@ -7,8 +7,8 @@ use Yii;
 use yii\base\InvalidConfigException;
 use yii\bootstrap\InputWidget;
 use yii\helpers\ArrayHelper;
-use yii\helpers\StringHelper;
 use yii\web\View;
+use yii\i18n\PhpMessageSource;
 
 /**
  * @author Ercan Bilgin <bilginnet@gmail.com>
@@ -84,11 +84,16 @@ class Cropper extends InputWidget
      */
     public $template = '{button} {preview}';
 
+    /**
+     * @throws InvalidConfigException
+     */
     public function init()
     {
         parent::init();
 
-        if (empty($this->uniqueId)) $this->uniqueId = uniqid('cropper_'); // set uniqueId if its empty
+        if (empty($this->uniqueId)) {
+            $this->uniqueId = uniqid('cropper_', true); // set uniqueId if its empty
+        }
 
         $this->i18n();
         $this->setJsOptions();
@@ -101,7 +106,7 @@ class Cropper extends InputWidget
         parent::run();
 
         $this->view->registerCss('
-            label[for='.$this->options['id'].'] {
+            label[for=' . $this->options['id'] . '] {
                 display: none;
             }
         ');
@@ -120,16 +125,22 @@ class Cropper extends InputWidget
         ]);
     }
 
+    /**
+     * @throws InvalidConfigException
+     */
     public function i18n()
     {
         if (!isset(\Yii::$app->get('i18n')->translations['cropper*'])) {
             \Yii::$app->get('i18n')->translations['cropper*'] = [
-                'class' => 'yii\i18n\PhpMessageSource',
+                'class' => PhpMessageSource::class,
                 'basePath' => __DIR__ . '/messages',
             ];
         }
     }
 
+    /**
+     * @throws InvalidConfigException
+     */
     private function setCropperOptions()
     {
         $options = $this->cropperOptions;
@@ -138,23 +149,11 @@ class Cropper extends InputWidget
             throw new InvalidConfigException(Yii::t('cropper', 'Either "cropWidth" and "cropHeight" properties must be specified.'));
         }
 
-        //$aspectRatio = $options['width'] / $options['height'];
-
-        /*if (!isset($options['preview']['width'])) {
-            $defaultPreviewWidth = 100;
-            if ($options['width'] < $defaultPreviewWidth)
-                $options['preview']['width'] = $options['width'];
-            else
-                $options['preview']['width'] = $defaultPreviewWidth;
-        }
-        if (!isset($options['preview']['height'])) $options['preview']['height'] = $options['preview']['width'] / $aspectRatio; */
-
-
         // preview options
         if (isset($options['preview']) && $options['preview'] !== false) {
             if (!isset($options['preview']['url'])) {
                 $options['preview']['url'] = null;
-            } else if (empty($options['preview']['url'])){
+            } else if (empty($options['preview']['url'])) {
                 $options['preview']['url'] = null;
             }
             $previewSizes = $this->getPreviewSizes($options);
@@ -166,24 +165,56 @@ class Cropper extends InputWidget
 
 
         // button & icons options
-        if (!isset($options['buttonCssClass'])) $options['buttonCssClass'] = 'btn btn-primary';
-        if (!isset($options['icons']['browse'])) $options['icons']['browse'] = '<i class="fa fa-image"></i>';
-        if (!isset($options['icons']['crop'])) $options['icons']['crop'] = '<i class="fa fa-crop"></i>';
-        if (!isset($options['icons']['close'])) $options['icons']['close'] = '<i class="fa fa-crop"></i>';
-        if (!isset($options['icons']['zoom-in'])) $options['icons']['zoom-in'] = '<i class="fa fa-search-plus"></i>';
-        if (!isset($options['icons']['zoom-out'])) $options['icons']['zoom-out'] = '<i class="fa fa-search-minus"></i>';
-        if (!isset($options['icons']['rotate-left'])) $options['icons']['rotate-left'] = '<i class="fa fa-rotate-left"></i>';
-        if (!isset($options['icons']['rotate-right'])) $options['icons']['rotate-right'] = '<i class="fa fa-rotate-right"></i>';
-        if (!isset($options['icons']['flip-horizontal'])) $options['icons']['flip-horizontal'] = '<i class="fa fa-arrows-h"></i>';
-        if (!isset($options['icons']['flip-vertical'])) $options['icons']['flip-vertical'] = '<i class="fa fa-arrows-v"></i>';
-        if (!isset($options['icons']['move-left'])) $options['icons']['move-left'] = '<i class="fa fa-arrow-left"></i>';
-        if (!isset($options['icons']['move-right'])) $options['icons']['move-right'] = '<i class="fa fa-arrow-right"></i>';
-        if (!isset($options['icons']['move-up'])) $options['icons']['move-up'] = '<i class="fa fa-arrow-up"></i>';
-        if (!isset($options['icons']['move-down'])) $options['icons']['move-down'] = '<i class="fa fa-arrow-down"></i>';
+        if (!isset($options['buttonCssClass'])) {
+            $options['buttonCssClass'] = 'btn btn-primary';
+        }
+        if (!isset($options['icons']['browse'])) {
+            $options['icons']['browse'] = '<i class="fa fa-image"></i>';
+        }
+        if (!isset($options['icons']['crop'])) {
+            $options['icons']['crop'] = '<i class="fa fa-crop"></i>';
+        }
+        if (!isset($options['icons']['close'])) {
+            $options['icons']['close'] = '<i class="fa fa-crop"></i>';
+        }
+        if (!isset($options['icons']['zoom-in'])) {
+            $options['icons']['zoom-in'] = '<i class="fa fa-search-plus"></i>';
+        }
+        if (!isset($options['icons']['zoom-out'])) {
+            $options['icons']['zoom-out'] = '<i class="fa fa-search-minus"></i>';
+        }
+        if (!isset($options['icons']['rotate-left'])) {
+            $options['icons']['rotate-left'] = '<i class="fa fa-rotate-left"></i>';
+        }
+        if (!isset($options['icons']['rotate-right'])) {
+            $options['icons']['rotate-right'] = '<i class="fa fa-rotate-right"></i>';
+        }
+        if (!isset($options['icons']['flip-horizontal'])) {
+            $options['icons']['flip-horizontal'] = '<i class="fa fa-arrows-h"></i>';
+        }
+        if (!isset($options['icons']['flip-vertical'])) {
+            $options['icons']['flip-vertical'] = '<i class="fa fa-arrows-v"></i>';
+        }
+        if (!isset($options['icons']['move-left'])) {
+            $options['icons']['move-left'] = '<i class="fa fa-arrow-left"></i>';
+        }
+        if (!isset($options['icons']['move-right'])) {
+            $options['icons']['move-right'] = '<i class="fa fa-arrow-right"></i>';
+        }
+        if (!isset($options['icons']['move-up'])) {
+            $options['icons']['move-up'] = '<i class="fa fa-arrow-up"></i>';
+        }
+        if (!isset($options['icons']['move-down'])) {
+            $options['icons']['move-down'] = '<i class="fa fa-arrow-down"></i>';
+        }
 
         $this->cropperOptions = $options;
     }
 
+    /**
+     * @param $options
+     * @return array
+     */
     private function getPreviewSizes($options)
     {
         $previewWidth = 100;
@@ -193,13 +224,12 @@ class Cropper extends InputWidget
             $previewWidth = ($options['width'] >= 100) ? $options['width'] : $previewWidth;
         } else {
             if (is_string($options['preview']['width'])) {
-                if (strstr($options['preview']['width'], '%') || strstr($options['preview']['width'], 'px')) {
+                if (strpos($options['preview']['width'], '%') !== false || strpos($options['preview']['width'], 'px') !== false) {
                     $previewWidth = $options['preview']['width'];
-                } else if ((int) $options['preview']['width'] > 0){
+                } else if ((int)$options['preview']['width'] > 0) {
                     $previewWidth = $options['preview']['width'] . 'px';
                 }
-            }
-            else if (is_integer($options['preview']['width'])) {
+            } else if (is_int($options['preview']['width'])) {
                 $previewWidth = $options['preview']['width'] . 'px';
             }
         }
@@ -208,12 +238,12 @@ class Cropper extends InputWidget
             $previewHeight = ($options['height'] >= 100) ? $options['height'] : $previewHeight;
         } else {
             if (is_string($options['preview']['height'])) {
-                if (strstr($options['preview']['height'], '%') || strstr($options['preview']['height'], 'px')) {
+                if (strpos($options['preview']['height'], '%') !== false || strpos($options['preview']['height'], 'px') !== false) {
                     $previewHeight = $options['preview']['height'];
-                } else if ((int) $options['preview']['height'] > 0){
+                } else if ((int)$options['preview']['height'] > 0) {
                     $previewHeight = $options['preview']['height'] . 'px';
                 }
-            } else if (is_integer($options['preview']['height'])) {
+            } else if (is_int($options['preview']['height'])) {
                 $previewHeight = $options['preview']['height'] . 'px';
             }
         }
@@ -222,6 +252,9 @@ class Cropper extends InputWidget
         return ['width' => $previewWidth, 'height' => $previewHeight];
     }
 
+    /**
+     * @return void
+     */
     private function setInputLabel()
     {
         $label = $this->label;
@@ -232,11 +265,14 @@ class Cropper extends InputWidget
         $this->label = $label;
     }
 
+    /**
+     * @return void
+     */
     private function setJsOptions()
     {
         $posArray = [View::POS_END, View::POS_READY, View::POS_HEAD, View::POS_LOAD, View::POS_BEGIN];
         $jsOptions = $this->jsOptions;
-        if(!isset($jsOptions['pos']) || (isset($jsOptions['pos']) && !ArrayHelper::isIn($jsOptions['pos'], $posArray))) {
+        if (!isset($jsOptions['pos']) || (isset($jsOptions['pos']) && !ArrayHelper::isIn($jsOptions['pos'], $posArray))) {
             $jsOptions['pos'] = View::POS_END;
         }
         $this->jsOptions = $jsOptions;
