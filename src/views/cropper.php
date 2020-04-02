@@ -78,13 +78,13 @@ if ($cropperOptions['preview'] !== false) {
 
 // input template
 if (!empty($name)) {
-    $input = Html::tag('div', Html::input('text', $name, $value, [
+    $input = Html::tag('div', Html::textarea($name, $value, [
         'id' => $uniqueId.'-input',
         'class' => 'hidden'
     ]), ['id' => $uniqueId, 'class' => '',]);
     $inputId = $uniqueId.'-input';
 } else {
-    $input = Html::tag('div', Html::activeTextInput($model, $attribute, [
+    $input = Html::tag('div', Html::activeTextarea($model, $attribute, [
         'value' => $value,
         'class' => 'hidden',
     ]), ['id' => $uniqueId, 'class' => '',]);
