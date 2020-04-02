@@ -322,8 +322,7 @@ $this->registerJs(<<<JS
             height: options_$uniqueId.data.cropHeight
         });               
         options_$uniqueId.element.result.html('<img src="' + options_$uniqueId.croppedCanvas.toDataURL() + '" id="cropper-image-$uniqueId">');        
-        options_$uniqueId.input.model.attr('type', 'text');        
-        options_$uniqueId.input.model.val(options_$uniqueId.croppedCanvas.toDataURL());
+        options_$uniqueId.input.model.html(options_$uniqueId.croppedCanvas.toDataURL());
     }
     
 
