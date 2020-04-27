@@ -5,23 +5,27 @@ namespace bilginnet\cropper;
 
 use yii\web\AssetBundle;
 use yii\web\View;
+use yii\web\YiiAsset;
+use yii\bootstrap\BootstrapAsset;
+use yii\bootstrap\BootstrapPluginAsset;
 
 /**
  * @author Ercan Bilgin <bilginnet@gmail.com>
  */
 class CropperReadyAsset extends AssetBundle
 {
-    public $sourcePath = '@bilginnet/cropper/assets';
+    public $sourcePath = '@vendor/npm-asset';
     public $jsOptions = ['position' => View::POS_READY];
     public $css = [
-        'cropper.css',
+        'cropperjs/dist/cropper.css',
     ];
     public $js = [
-        'cropper.js'
+        'cropperjs/dist/cropper.js',
+        'jquery-cropper/dist/jquery-cropper.js',
     ];
     public $depends = [
-        'yii\web\YiiAsset',
-        'yii\bootstrap\BootstrapAsset',
-        'yii\bootstrap\BootstrapPluginAsset',
+        YiiAsset::class,
+        BootstrapAsset::class,
+        BootstrapPluginAsset::class,
     ];
 }
